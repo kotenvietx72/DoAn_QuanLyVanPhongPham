@@ -1,7 +1,3 @@
-/* ======================================= */
-/* JS TRANG CHI TIẾT SẢN PHẨM
-/* ======================================= */
-
 // Chờ DOM tải xong
 document.addEventListener("DOMContentLoaded", function() {
 
@@ -32,22 +28,40 @@ document.addEventListener("DOMContentLoaded", function() {
     const qtyInput = document.getElementById("qtyInput");
 
     // Nút Tăng (+)
-    btnPlus.addEventListener("click", function() {
-        let currentValue = parseInt(qtyInput.value);
-        if (isNaN(currentValue)) {
-            currentValue = 0;
-        }
-        qtyInput.value = currentValue + 1;
-    });
+    if (btnPlus) { // Thêm kiểm tra
+        btnPlus.addEventListener("click", function() {
+            let currentValue = parseInt(qtyInput.value);
+            if (isNaN(currentValue)) {
+                currentValue = 0;
+            }
+            qtyInput.value = currentValue + 1;
+        });
+    }
 
     // Nút Giảm (-)
-    btnMinus.addEventListener("click", function() {
-        let currentValue = parseInt(qtyInput.value);
-        if (isNaN(currentValue) || currentValue <= 1) {
-            qtyInput.value = 1; // Không cho giảm dưới 1
-        } else {
-            qtyInput.value = currentValue - 1;
-        }
+    if (btnMinus) { // Thêm kiểm tra
+        btnMinus.addEventListener("click", function() {
+            let currentValue = parseInt(qtyInput.value);
+            if (isNaN(currentValue) || currentValue <= 1) {
+                qtyInput.value = 1; // Không cho giảm dưới 1
+            } else {
+                qtyInput.value = currentValue - 1;
+            }
+        });
+    }
+
+
+    const optionButtons = document.querySelectorAll(".btn-option");
+
+    optionButtons.forEach((button, index) => {
+        button.addEventListener("click", function(event) {
+
+            event.preventDefault();
+            optionButtons.forEach(btn => {
+                btn.classList.remove("active");
+            });
+            this.classList.add("active");
+        });
     });
 
 });

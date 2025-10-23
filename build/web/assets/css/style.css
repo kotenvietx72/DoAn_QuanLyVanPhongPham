@@ -8,7 +8,6 @@ body {
   min-height: 100vh;
 }
 
-/* Navbar */
 .navbar {
   background: linear-gradient(90deg, #0066ff 0%, #004de6 100%);
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
@@ -17,10 +16,13 @@ body {
 .navbar-brand {
   font-weight: 700;
   letter-spacing: 0.5px;
-  font-size: 20px;
+  font-size: 24px;
+  align-items: center;
 }
 
 .navbar-brand img {
+  height: 45px;
+  width: auto;
   margin-right: 8px;
   border-radius: 4px;
 }

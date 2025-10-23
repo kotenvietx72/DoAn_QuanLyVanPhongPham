@@ -15,7 +15,7 @@
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
             <div class="container-fluid">
                 <a class="navbar-brand fw-bold" href="#">
-                    <img src="${pageContext.request.contextPath}/assets/image/logo.png" alt="Logo" width="40"> 3AE
+                    <img src="${pageContext.request.contextPath}/assets/image/logo.png" alt="Logo" width="60"> 3AE
                 </a>
 
                 <form class="d-flex mx-auto w-50">
@@ -76,8 +76,7 @@
 
         <div class="container product-detail-container my-5">
             <div class="row">
-
-                <div class="col-lg-5">
+                <div class="col-lg-6">
                     <div class="main-image-wrapper mb-3">
                         <img src="${pageContext.request.contextPath}/assets/image/demo/sp_special_1.jpg" 
                              id="mainProductImage" 
@@ -95,7 +94,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-4">
+                <div class="col-lg-6">
                     <h2 class="product-detail-title">Bút máy luyện viết chữ đẹp Thiên Long (Tên mẫu)</h2>
 
                     <div class="product-meta d-flex gap-4 mb-3">
@@ -136,30 +135,9 @@
                         </button>
                     </div>
                 </div>
-
-                <div class="col-lg-3">
-                    <div class="voucher-list-wrapper">
-                        <div class="voucher-item">
-                            <div class="voucher-icon">EK</div>
-                            <div class="voucher-info">
-                                <span class="voucher-title">Giảm 50.000đ</span>
-                                <span class="voucher-condition">Đơn hàng từ 300.000đ</span>
-                                <span class="voucher-code">Mã: <strong>3AESALE50K</strong></span>
-                            </div>
-                            <button class="btn btn-copy-code">Sao chép</button>
-                        </div>
-                        <div class="voucher-item">
-                            <div class="voucher-icon">EK</div>
-                            <div class="voucher-info">
-                                <span class="voucher-title">Giảm 15% (tối đa 30K)</span>
-                                <span class="voucher-condition">Đơn hàng từ 100.000đ</span>
-                                <span class="voucher-code">Mã: <strong>3AESALE15</strong></span>
-                            </div>
-                            <button class="btn btn-copy-code">Sao chép</button>
-                        </div>
-                    </div>
-                </div>
-            </div> <div class="row mt-5">
+            </div> 
+                    
+            <div class="row mt-5">
                 <div class="col-12">
                     <div class="product-tabs">
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -197,7 +175,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
 
         <footer class="site-footer pt-4 pb-3 mt-5">

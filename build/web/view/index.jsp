@@ -14,7 +14,7 @@
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
             <div class="container-fluid">
                 <a class="navbar-brand fw-bold" href="#">
-                    <img src="${pageContext.request.contextPath}/assets/image/logo.png" alt="Logo" width="40"> 3AE
+                    <img src="${pageContext.request.contextPath}/assets/image/logo.png" alt="Logo" width="60"> 3AE
                 </a>
 
                 <form class="d-flex mx-auto w-50">
@@ -481,7 +481,7 @@
                 <div class="row">
                     <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
                         <a class="navbar-brand fw-bold mb-2" href="#">
-                            <img src="${pageContext.request.contextPath}/assets/image/logo.png" alt="Logo"> VPP 3AE
+                            <img src="${pageContext.request.contextPath}/assets/image/logo.png" alt="Logo" width="60"> VPP 3AE
                         </a>
                         <p>
                             Chuyên cung cấp các sản phẩm văn phòng phẩm, dụng cụ học sinh
