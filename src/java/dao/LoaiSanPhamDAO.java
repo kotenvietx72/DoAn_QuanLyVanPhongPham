@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LoaiSanPhamDAO {
-    
+
     // Lấy danh sách loại sản phẩm
     public List<LoaiSanPham> getAll() {
         List<LoaiSanPham> list = new ArrayList<>();
@@ -86,6 +86,29 @@ public class LoaiSanPhamDAO {
 
         return false;
     }
+    
+    // Lấy thông tin Loại Sản Phẩm dựa theo Identifier (ví dụ: "but-bi")
+    public LoaiSanPham getLoaiSanPhamByIdentifier(String identifier) {
+        String sql = "SELECT * FROM LoaiSanPham WHERE LOWER(REPLACE(tenLoai, ' ', '-')) = ?";
+        LoaiSanPham loai = null;
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, identifier.toLowerCase());
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                loai = new LoaiSanPham(
+                        rs.getInt("loaiId"),
+                        rs.getString("tenLoai"),
+                        rs.getString("moTa")
+                );
+            }
+
+        } catch (Exception e) { }
+        return loai;
+    }
 
     // Tìm kiếm loại sản phẩm theo tên
     public List<LoaiSanPham> search(String keyword) {
@@ -106,11 +129,7 @@ public class LoaiSanPhamDAO {
                 ));
             }
 
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-
+        } catch(Exception e) { }
         return list;
     }
-
 }

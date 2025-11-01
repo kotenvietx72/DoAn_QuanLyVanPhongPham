@@ -9,7 +9,9 @@ import java.util.ArrayList;
 
 import model.SanPham;
 import dao.*;
+import jakarta.servlet.annotation.WebServlet;
 
+@WebServlet(name = "HomeServlet")
 public class Home extends HttpServlet {
 
     @Override
@@ -21,24 +23,18 @@ public class Home extends HttpServlet {
         try {
             SanPhamDAO sanPhamDAO = new SanPhamDAO();
 
-            // --- Lấy dữ liệu sản phẩm từ DAO ---
-
             // 1. Lấy danh sách sản phẩm Flash Sale (ví dụ: 5 sản phẩm)
             ArrayList<SanPham> listFlashSale = sanPhamDAO.getSanPhamFlashSale(5);
 
             // 2. Lấy danh sách sản phẩm "Dành cho bạn" (ví dụ: 7 sản phẩm)
-            ArrayList<SanPham> listSpecialProducts = sanPhamDAO.getSanPhamDacBiet(7);
+            ArrayList<SanPham> listSpecialProducts = sanPhamDAO.getSanPhamDacBiet(20);
 
             // --- Gửi dữ liệu sang JSP ---
-
-            // Đặt các danh sách sản phẩm vào request attribute
-            // Tên attribute ("listFlashSale", "listSpecialProducts")
-            // PHẢI KHỚP với tên bạn dùng trong thẻ <c:forEach> của file index.jsp
             request.setAttribute("listFlashSale", listFlashSale);
             request.setAttribute("listSpecialProducts", listSpecialProducts);
 
             // --- Chuyển hướng đến file JSP để hiển thị ---
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+            request.getRequestDispatcher("view/index.jsp").forward(request, response);
 
         } catch (ServletException | IOException e) {
             throw new ServletException("Lỗi khi xử lý trang chủ", e);
@@ -53,6 +49,6 @@ public class Home extends HttpServlet {
     
     @Override
     public String getServletInfo() {
-        return "Servlet xử lí hiển thị trang cá nhân";
+        return "Servlet xử lí hiển thị trang chủ";
     }
 }

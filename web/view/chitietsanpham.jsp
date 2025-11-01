@@ -13,7 +13,6 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/product-detail.css">
     </head>
     <body>
-        <%-- PASTE HEADER CỦA BẠN VÀO ĐÂY --%>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
             <div class="container-fluid">
                 <a class="navbar-brand fw-bold" href="${pageContext.request.contextPath}/trang-chu">
@@ -36,6 +35,7 @@
                 </ul>
             </div>
         </nav>
+                        
         <nav class="navbar navbar-expand-lg bg-white shadow-sm category-nav-custom">
             <div class="container-fluid">
                 <div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
@@ -72,8 +72,6 @@
                 </div>
             </div>
         </nav>
-        <%-- KẾT THÚC HEADER --%>
-
 
         <div class="container product-detail-container my-5">
             <c:if test="${not empty sanPham}"> <%-- Chỉ hiển thị nếu có sản phẩm --%>
@@ -110,30 +108,23 @@
                         <h2 class="product-detail-title">${sanPham.tenSanPham}</h2>
 
                         <div class="product-meta d-flex gap-4 mb-3">
-                            <%-- (Cần lấy tên thương hiệu từ nhaCungCapId nếu muốn) --%>
-                            <span>Thương hiệu: <a href="#">Thiên Long</a></span> <%-- Tạm để Thiên Long --%>
-                            <%-- (Mã SKU nếu có trong model SanPham) --%>
-                            <%-- <span>Mã SKU: <span class="text-dark">${sanPham.maSKU}</span></span> --%>
-                            <span>Mã SP: <span class="text-dark">${sanPham.sanPhamId}</span></span> <%-- Hiển thị ID --%>
+                            <span>Thương hiệu: <a href="#">Thiên Long</a></span>
+                            <span>Mã SP: <span class="text-dark">${sanPham.sanPhamId}</span></span>
                         </div>
 
                         <div class="price-detail-box">
-                            <%-- Hiển thị giá bán --%>
-                            <span class="sale-price"><fmt:formatNumber value="${sanPham.giaBan}" type="currency" currencySymbol="" minFractionDigits="0"/>₫</span>
-                            <%-- Hiển thị giá gốc và % giảm (CẦN CÓ giaGoc) --%>
-                            <c:if test="${sanPham.giaGoc != null && sanPham.giaGoc > sanPham.giaBan}">
-                                <span class="old-price"><fmt:formatNumber value="${sanPham.giaGoc}" type="currency" currencySymbol="" minFractionDigits="0"/>₫</span>
-                                <c:set var="discountPercent" value="${(sanPham.giaGoc - sanPham.giaBan) * 100 / sanPham.giaGoc}" />
-                                <span class="discount-badge-detail">GIẢM <fmt:formatNumber value="${discountPercent / 100}" type="percent" minIntegerDigits="0"/></span>
-                            </c:if>
+                            <c:set var="giaMoi" value="${sanPham.giaKhuyenMai}" /> 
+                            <c:set var="giaCu" value="${sanPham.giaBan}" />
+                            <span class="sale-price"><fmt:formatNumber value="${giaMoi}" type="currency" currencySymbol="" minFractionDigits="0"/>₫</span>
+                            <span class="old-price"><fmt:formatNumber value="${giaCu}" type="currency" currencySymbol="" minFractionDigits="0"/>₫</span>
+                            <c:set var="phanTram" value="${(giaCu - giaMoi) * 100 / giaCu}" />
+                            <span class="discount-badge-detail">GIẢM <fmt:formatNumber value="${phanTram / 100}" type="percent" minIntegerDigits="0"/></span>
                         </div>
 
                         <div class="product-options mt-4">
-                            <h6 class="option-title">Phân loại:</h6> <%-- Cần logic hiển thị phân loại nếu có --%>
+                            <h6 class="option-title">Phân loại:</h6>
                             <div class="option-list d-flex gap-2">
-                                <button class="btn btn-option active">Mặc định</button> <%-- Ví dụ --%>
-                                <%-- <button class="btn btn-option">Màu Xanh</button> --%>
-                                <%-- <button class="btn btn-option">Màu Đỏ</button> --%>
+                                <button class="btn btn-option active">Mặc định</button>
                             </div>
                         </div>
 
@@ -147,7 +138,6 @@
                         </div>
 
                         <div class="action-buttons mt-4 d-flex gap-3">
-                            <%-- Nút Thêm vào giỏ (cần form hoặc JS để gửi) --%>
                             <form action="them-vao-gio" method="POST" style="flex: 1;"> <%-- Ví dụ dùng form --%>
                                 <input type="hidden" name="productId" value="${sanPham.sanPhamId}">
                                 <input type="hidden" name="quantity" value="1"> <%-- Cần cập nhật bằng JS --%>
@@ -155,7 +145,6 @@
                                     <i class="bi bi-cart-plus-fill"></i> Thêm vào giỏ
                                 </button>
                             </form>
-                            <%-- Nút Mua ngay (cần form hoặc JS để gửi) --%>
                             <form action="mua-ngay" method="POST" style="flex: 1;"> <%-- Ví dụ dùng form --%>
                                 <input type="hidden" name="productId" value="${sanPham.sanPhamId}">
                                 <input type="hidden" name="quantity" value="1"> <%-- Cần cập nhật bằng JS --%>
@@ -222,7 +211,6 @@
             </c:if>
         </div>
 
-        <%-- PASTE FOOTER CỦA BẠN VÀO ĐÂY --%>
         <footer class="site-footer pt-4 pb-3 mt-5">
             <div class="container text-center text-md-start">
                 <div class="row">
@@ -256,13 +244,13 @@
                 </div>
             </div>
         </footer>
+                        
         <div class="copyright-bar">
             <div class="container text-center p-3">
                 © 2025 Copyright:
                 <a class="fw-bold" href="#">VPP-3AE.com</a>
             </div>
         </div>
-        <%-- KẾT THÚC FOOTER --%>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
         <script src="${pageContext.request.contextPath}/assets/js/product-detail.js"></script>
