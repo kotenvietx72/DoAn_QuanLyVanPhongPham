@@ -9,16 +9,26 @@ public class DanhGiaSanPham {
     private int diem;
     private String noiDung;
     private Date ngayDanhGia;
+    private String tenKhachHang;
+
+    public String getTenKhachHang() {
+        return tenKhachHang;
+    }
+
+    public void setTenKhachHang(String tenKhachHang) {
+        this.tenKhachHang = tenKhachHang;
+    }
 
     public DanhGiaSanPham() {}
 
-    public DanhGiaSanPham(int danhGiaId, int sanPhamId, int khachHangId, int diem, String noiDung, Date ngayDanhGia) {
+    public DanhGiaSanPham(int danhGiaId, int sanPhamId, int khachHangId, int diem, String noiDung, Date ngayDanhGia, String tenKhachHang) {
         this.danhGiaId = danhGiaId;
         this.sanPhamId = sanPhamId;
         this.khachHangId = khachHangId;
         this.diem = diem;
         this.noiDung = noiDung;
         this.ngayDanhGia = ngayDanhGia;
+        this.tenKhachHang = tenKhachHang;
     }
 
     public int getDanhGiaId() {

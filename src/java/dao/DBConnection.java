@@ -5,18 +5,21 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBConnection {
+    
+    // Đảm bảo tên CSDL "vanphongpham" là chính xác
     private static final String URL = "jdbc:mysql://localhost:3306/vanphongpham?useUnicode=true&characterEncoding=UTF-8";
     private static final String USER = "root";
-    private static final String PASSWORD = "";
+    private static final String PASSWORD = ""; // Mật khẩu của bạn
 
     public static Connection getConnection() {
         Connection conn = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            // Dùng driver mới (cj)
+            Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection(URL, USER, PASSWORD);
-            System.out.println("Kết nối MySQL (XAMPP) thành công!");
         } catch (ClassNotFoundException | SQLException e) {
-            System.out.println("Lỗi kết nối MySQL!");
+            System.out.println("LỖI KẾT NỐI MYSQL! Kiểm tra DBConnection.java hoặc CSDL.");
+            // In lỗi chi tiết ra log server
         }
         return conn;
     }

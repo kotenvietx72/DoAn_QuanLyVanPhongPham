@@ -15,36 +15,33 @@ public class ChiTietSanPham extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
 
-        String idStr = request.getParameter("productId");
-
-        // --- Kiểm tra ID ---
-        if (idStr == null || idStr.trim().isEmpty()) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Thiếu ID sản phẩm.");
-            return;
-        }
-
         try {
-            int productId = Integer.parseInt(idStr); // Chuyển ID sang số nguyên
-            SanPhamDAO sanPhamDAO = new SanPhamDAO();
-            SanPham sanPham = sanPhamDAO.getSanPhamById(productId); // Gọi hàm lấy sản phẩm bằng ID
+            String idStr = request.getParameter("productId"); 
 
-            // --- Kiểm tra kết quả ---
-            if (sanPham == null) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Không tìm thấy sản phẩm với ID = " + productId);
+            if (idStr == null || idStr.trim().isEmpty()) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Thiếu ID sản phẩm (productId).");
                 return;
             }
-            request.setAttribute("sanPham", sanPham);
 
-            // --- Chuyển hướng đến file JSP ---
+            int productId = Integer.parseInt(idStr); 
+            
+            SanPhamDAO sanPhamDAO = new SanPhamDAO();
+            SanPham sanPham = sanPhamDAO.getSanPhamById(productId); 
+
+            if (sanPham == null) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Không tìm thấy sản phẩm.");
+                return;
+            }
+
+            request.setAttribute("sanPham", sanPham); 
+            
             request.getRequestDispatcher("view/chitietsanpham.jsp").forward(request, response);
 
-        } catch (NumberFormatException e) {
-            // Nếu ID không phải là số hợp lệ
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID sản phẩm không hợp lệ: " + idStr);
-        } catch (ServletException | IOException e) { // Các lỗi khác (ví dụ: lỗi kết nối CSDL)
+        } catch (ServletException | IOException | NumberFormatException e) { 
             throw new ServletException("Lỗi khi lấy chi tiết sản phẩm", e);
         }
     }

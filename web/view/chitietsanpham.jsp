@@ -1,16 +1,22 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ page import="java.lang.Math" %> <%-- BẮT BUỘC CÓ DÒNG NÀY --%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
-        <%-- Hiển thị tên sản phẩm thực tế trên title --%>
         <title>${sanPham.tenSanPham} | Văn Phòng Phẩm 3AE</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css">
+
+        <%-- Link đến file CSS ngoài --%>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/product-detail.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
@@ -29,44 +35,56 @@
                     <li class="nav-item"><a class="nav-link text-white" href="dang-ky">Đăng ký</a></li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="gio-hang">
-                            🛒 Giỏ hàng <span class="badge bg-danger">0</span> <%-- Cần cập nhật động --%>
+                            🛒 Giỏ hàng <span class="badge bg-danger">0</span>
                         </a>
                     </li>
                 </ul>
             </div>
         </nav>
-                        
         <nav class="navbar navbar-expand-lg bg-white shadow-sm category-nav-custom">
             <div class="container-fluid">
                 <div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownButViet" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-pen-fill"></i> Bút - Viết
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink1">
-                                <li><a class="dropdown-item" href="danh-muc?loai=but-bi">Bút bi</a></li>
-                                <li><a class="dropdown-item" href="danh-muc?loai=but-chi">Bút chì</a></li>
-                                <li><a class="dropdown-item" href="danh-muc?loai=but-highlight">Bút highlight</a></li>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownButViet">
+                                <li><a class="dropdown-item" href="danh-muc?loaiId=1">Tất cả bút viết</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-book-half"></i> Sổ - Vở
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownVoSach" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-journal-bookmark-fill"></i> Sổ - Vở - Sách
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink2">
-                                <li><a class="dropdown-item" href="danh-muc?loai=so-tay">Sổ tay</a></li>
-                                <li><a class="dropdown-item" href="danh-muc?loai=vo-hoc-sinh">Vở học sinh</a></li>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownVoSach">
+                                <li><a class="dropdown-item" href="danh-muc?loaiId=8">Sổ / Vở</a></li>
+                                <li><a class="dropdown-item" href="danh-muc?loaiId=7">Sách</a></li>
+                                <li><a class="dropdown-item" href="danh-muc?loaiId=6">Nhãn vở</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownHocTap" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-rulers"></i> Dụng cụ học tập
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownHocTap">
+                                <li><a class="dropdown-item" href="danh-muc?loaiId=2">Dụng cụ học sinh</a></li>
+                                <li><a class="dropdown-item" href="danh-muc?loaiId=5">Hộp bút / Ba lô</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownVanPhong" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-folder-fill"></i> Văn phòng phẩm
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownVanPhong">
+                                <li><a class="dropdown-item" href="danh-muc?loaiId=2">Bìa hồ sơ / Bảng viết</a></li>
+                                <li><a class="dropdown-item" href="danh-muc?loaiId=4">Giấy in</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="danh-muc?loai=dung-cu-hoc-sinh"><i class="bi bi-rulers"></i> Dụng cụ học sinh</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="danh-muc?loai=dung-cu-van-phong"><i class="bi bi-folder2-open"></i> Dụng cụ văn phòng</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="danh-muc?loai=dung-cu-my-thuat"><i class="bi bi-palette-fill"></i> Dụng cụ mỹ thuật</a>
+                            <a class="nav-link" href="danh-muc?loaiId=3">
+                                <i class="bi bi-calculator-fill"></i> Máy tính
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -74,58 +92,66 @@
         </nav>
 
         <div class="container product-detail-container my-5">
-            <c:if test="${not empty sanPham}"> <%-- Chỉ hiển thị nếu có sản phẩm --%>
+            <c:if test="${not empty sanPham}">
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="main-image-wrapper mb-3">
-                            <%-- Hiển thị ảnh chính của sản phẩm --%>
                             <img src="${pageContext.request.contextPath}${sanPham.hinhAnh}"
                                  id="mainProductImage"
                                  class="img-fluid"
                                  alt="${sanPham.tenSanPham}">
                         </div>
-                        <div class="thumbnail-list d-flex gap-2">
-                            <%-- Hiển thị ảnh chính làm thumbnail đầu tiên --%>
-                            <img src="${pageContext.request.contextPath}${sanPham.hinhAnh}" class="thumbnail-img active" alt="Thumb 1">
-
-                            <%-- Ví dụ ảnh phụ (cần thay bằng logic lấy listAnhPhu nếu có) --%>
-                            <c:if test="${not empty listAnhPhu}">
-                                <c:forEach var="imgPhu" items="${listAnhPhu}" varStatus="loop">
-                                    <img src="${pageContext.request.contextPath}${imgPhu}" class="thumbnail-img" alt="Thumb ${loop.index + 2}">
-                                </c:forEach>
-                            </c:if>
-                            <%-- Ảnh demo nếu không có listAnhPhu --%>
-                            <c:if test="${empty listAnhPhu}">
-                                <img src="${pageContext.request.contextPath}/assets/image/demo/sp_detail_2.jpg" class="thumbnail-img" alt="Thumb 2">
-                                <img src="${pageContext.request.contextPath}/assets/image/demo/sp_detail_3.jpg" class="thumbnail-img" alt="Thumb 3">
-                                <img src="${pageContext.request.contextPath}/assets/image/demo/sp_detail_4.jpg" class="thumbnail-img" alt="Thumb 4">
-                            </c:if>
-                        </div>
                     </div>
 
                     <div class="col-lg-6">
-                        <%-- Hiển thị tên sản phẩm --%>
+
+                        <div class="product-meta-tags mb-2">
+                            <span class="meta-tag">Thương hiệu: <a href="#">3 Anh Em</a></span>
+                        </div>
+
+                        <div class="product-meta-tags mb-2">
+                            <span class="meta-tag">Mã sản phẩm: ${sanPham.sanPhamId}</span>
+                            <c:if test="${sanPham.tonKho > 0}">
+                                <span class="meta-tag text-success"><i class="bi bi-check-circle-fill"></i> Còn hàng</span>
+                            </c:if>
+                            <c:if test="${sanPham.tonKho <= 0}">
+                                <span class="meta-tag text-danger"><i class="bi bi-x-circle-fill"></i> Hết hàng</span>
+                            </c:if>
+                        </div>
+
                         <h2 class="product-detail-title">${sanPham.tenSanPham}</h2>
 
-                        <div class="product-meta d-flex gap-4 mb-3">
-                            <span>Thương hiệu: <a href="#">Thiên Long</a></span>
-                            <span>Mã SP: <span class="text-dark">${sanPham.sanPhamId}</span></span>
+                        <div class="product-review-summary mb-3">
+                            <c:set var="diemTrungBinh" value="${sanPham.diemTrungBinh}" />
+                            <c:set var="tongDanhGia" value="${sanPham.tongDanhGia}" />
+                            <c:set var="diemTron" value="${Math.round(diemTrungBinh * 2) / 2.0}" />
+                            <span class="rating-stars">
+                                <c:forEach begin="1" end="5" var="i">
+                                    <c:choose>
+                                        <c:when test="${diemTron >= i}"><i class="bi bi-star-fill"></i></c:when>
+                                        <c:when test="${diemTron >= (i - 0.5)}"><i class="bi bi-star-half"></i></c:when>
+                                        <c:otherwise><i class="bi bi-star"></i></c:otherwise>
+                                    </c:choose>
+                                </c:forEach>
+                            </span>
+                            <span class="rating-score"><fmt:formatNumber value="${diemTrungBinh}" maxFractionDigits="1"/></span>
+
+                            <%-- THÊM id="scrollToReviews" VÀO LINK NÀY --%>
+                            <a href="#reviews-tab" class="rating-count" id="scrollToReviews">(Xem ${tongDanhGia} đánh giá)</a>
+
+                            <span class="divider">|</span>
+                            <span class="sold-count">Đã bán 100+</span>
                         </div>
 
                         <div class="price-detail-box">
                             <c:set var="giaMoi" value="${sanPham.giaKhuyenMai}" /> 
                             <c:set var="giaCu" value="${sanPham.giaBan}" />
+
                             <span class="sale-price"><fmt:formatNumber value="${giaMoi}" type="currency" currencySymbol="" minFractionDigits="0"/>₫</span>
                             <span class="old-price"><fmt:formatNumber value="${giaCu}" type="currency" currencySymbol="" minFractionDigits="0"/>₫</span>
+
                             <c:set var="phanTram" value="${(giaCu - giaMoi) * 100 / giaCu}" />
                             <span class="discount-badge-detail">GIẢM <fmt:formatNumber value="${phanTram / 100}" type="percent" minIntegerDigits="0"/></span>
-                        </div>
-
-                        <div class="product-options mt-4">
-                            <h6 class="option-title">Phân loại:</h6>
-                            <div class="option-list d-flex gap-2">
-                                <button class="btn btn-option active">Mặc định</button>
-                            </div>
                         </div>
 
                         <div class="product-quantity mt-4">
@@ -135,19 +161,20 @@
                                 <input type="text" id="qtyInput" value="1" readonly>
                                 <button class="btn btn-qty" id="btnQtyPlus"><i class="bi bi-plus"></i></button>
                             </div>
+                            <span class="text-muted ms-3 small">(${sanPham.tonKho} sản phẩm có sẵn)</span>
                         </div>
 
                         <div class="action-buttons mt-4 d-flex gap-3">
-                            <form action="them-vao-gio" method="POST" style="flex: 1;"> <%-- Ví dụ dùng form --%>
+                            <form action="them-vao-gio" method="POST" style="flex: 1;">
                                 <input type="hidden" name="productId" value="${sanPham.sanPhamId}">
-                                <input type="hidden" name="quantity" value="1"> <%-- Cần cập nhật bằng JS --%>
+                                <input type="hidden" name="quantity" id="formQtyAdd" value="1">
                                 <button type="submit" class="btn btn-add-to-cart w-100">
                                     <i class="bi bi-cart-plus-fill"></i> Thêm vào giỏ
                                 </button>
                             </form>
-                            <form action="mua-ngay" method="POST" style="flex: 1;"> <%-- Ví dụ dùng form --%>
+                            <form action="mua-ngay" method="POST" style="flex: 1;">
                                 <input type="hidden" name="productId" value="${sanPham.sanPhamId}">
-                                <input type="hidden" name="quantity" value="1"> <%-- Cần cập nhật bằng JS --%>
+                                <input type="hidden" name="quantity" id="formQtyBuy" value="1">
                                 <button type="submit" class="btn btn-buy-now w-100">
                                     Mua ngay
                                 </button>
@@ -167,35 +194,43 @@
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="false">
-                                        Đánh Giá <%-- (Số lượng đánh giá nếu có) --%>
-                                        <c:if test="${not empty listDanhGia}">(${listDanhGia.size()})</c:if>
-                                        </button>
-                                    </li>
-                                </ul>
-                                <div class="tab-content" id="myTabContent">
-                                    <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
-                                        <div class="tab-pane-content">
-                                        <%-- Hiển thị mô tả sản phẩm --%>
+                                        Đánh Giá (${sanPham.tongDanhGia})
+                                    </button>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+                                    <div class="tab-pane-content">
                                         <p>${sanPham.moTa}</p>
-                                        <%-- Thêm nội dung mô tả chi tiết nếu cần --%>
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
                                     <div class="tab-pane-content">
-                                        <c:if test="${not empty listDanhGia}">
-                                            <p>Hiển thị ${listDanhGia.size()} đánh giá:</p>
-                                            <%-- Dùng <c:forEach> để lặp qua listDanhGia --%>
-                                            <ul>
-                                                <c:forEach var="dg" items="${listDanhGia}">
-                                                    <li>
-                                                        <strong>Điểm: ${dg.diem}/5</strong> - ${dg.noiDung}
-                                                        <br><small>(${dg.ngayDanhGia})</small> <%-- Cần format ngày --%>
-                                                    </li>
-                                                </c:forEach>
-                                            </ul>
+                                        <c:if test="${empty sanPham.listDanhGia}">
+                                            <p class="text-center">Chưa có đánh giá nào cho sản phẩm này.</p>
                                         </c:if>
-                                        <c:if test="${empty listDanhGia}">
-                                            <p>Chưa có đánh giá nào cho sản phẩm này.</p>
+                                        <c:if test="${not empty sanPham.listDanhGia}">
+                                            <c:forEach var="dg" items="${sanPham.listDanhGia}">
+                                                <div class="review-item mb-3 pb-3 border-bottom">
+                                                    <div class="review-author">
+                                                        <strong>
+                                                            <%-- (Bạn cần sửa Model DanhGiaSanPham để thêm tenKhachHang) --%>
+                                                            Khách hàng #${dg.khachHangId}
+                                                        </strong>
+                                                    </div>
+                                                    <div class="review-stars rating-stars my-1">
+                                                        <c:forEach begin="1" end="5" var="i">
+                                                            <i class="bi ${i <= dg.diem ? 'bi-star-fill' : 'bi-star'}"></i>
+                                                        </c:forEach>
+                                                    </div>
+                                                    <div class="review-content">
+                                                        <p class="mb-1">${dg.noiDung}</p>
+                                                        <small class="text-muted">
+                                                            <fmt:formatDate value="${dg.ngayDanhGia}" pattern="dd-MM-yyyy HH:mm"/>
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </c:forEach>
                                         </c:if>
                                     </div>
                                 </div>
@@ -244,14 +279,12 @@
                 </div>
             </div>
         </footer>
-                        
         <div class="copyright-bar">
             <div class="container text-center p-3">
                 © 2025 Copyright:
                 <a class="fw-bold" href="#">VPP-3AE.com</a>
             </div>
         </div>
-
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
         <script src="${pageContext.request.contextPath}/assets/js/product-detail.js"></script>
     </body>

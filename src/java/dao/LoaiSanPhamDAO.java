@@ -12,11 +12,9 @@ public class LoaiSanPhamDAO {
         List<LoaiSanPham> list = new ArrayList<>();
         String sql = "SELECT * FROM LoaiSanPham";
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
 
-            while(rs.next()) {
+            while (rs.next()) {
                 list.add(new LoaiSanPham(
                         rs.getInt("loaiId"),
                         rs.getString("tenLoai"),
@@ -24,7 +22,7 @@ public class LoaiSanPhamDAO {
                 ));
             }
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -35,15 +33,14 @@ public class LoaiSanPhamDAO {
     public boolean insert(LoaiSanPham lsp) {
         String sql = "INSERT INTO LoaiSanPham (tenLoai, moTa) VALUES (?, ?)";
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, lsp.getTenLoai());
             ps.setString(2, lsp.getMoTa());
 
             return ps.executeUpdate() > 0;
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -54,8 +51,7 @@ public class LoaiSanPhamDAO {
     public boolean update(LoaiSanPham lsp) {
         String sql = "UPDATE LoaiSanPham SET tenLoai = ?, moTa = ? WHERE loaiId = ?";
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, lsp.getTenLoai());
             ps.setString(2, lsp.getMoTa());
@@ -63,7 +59,7 @@ public class LoaiSanPhamDAO {
 
             return ps.executeUpdate() > 0;
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -74,28 +70,26 @@ public class LoaiSanPhamDAO {
     public boolean delete(int id) {
         String sql = "DELETE FROM LoaiSanPham WHERE loaiId = ?";
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return false;
     }
-    
-    // Lấy thông tin Loại Sản Phẩm dựa theo Identifier (ví dụ: "but-bi")
-    public LoaiSanPham getLoaiSanPhamByIdentifier(String identifier) {
-        String sql = "SELECT * FROM LoaiSanPham WHERE LOWER(REPLACE(tenLoai, ' ', '-')) = ?";
+
+    // Lấy thông tin Loại Sản Phẩm dựa theo Id
+    public LoaiSanPham getLoaiSanPhamById(int loaiId) {
+        String sql = "SELECT * FROM LoaiSanPham WHERE loaiId = ?";
         LoaiSanPham loai = null;
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, identifier.toLowerCase());
+            ps.setInt(1, loaiId);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
@@ -105,8 +99,9 @@ public class LoaiSanPhamDAO {
                         rs.getString("moTa")
                 );
             }
-
-        } catch (Exception e) { }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return loai;
     }
 
@@ -115,13 +110,12 @@ public class LoaiSanPhamDAO {
         List<LoaiSanPham> list = new ArrayList<>();
         String sql = "SELECT * FROM LoaiSanPham WHERE tenLoai LIKE ?";
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, "%" + keyword + "%");
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
+            while (rs.next()) {
                 list.add(new LoaiSanPham(
                         rs.getInt("loaiId"),
                         rs.getString("tenLoai"),
@@ -129,7 +123,8 @@ public class LoaiSanPhamDAO {
                 ));
             }
 
-        } catch(Exception e) { }
+        } catch (Exception e) {
+        }
         return list;
     }
 }

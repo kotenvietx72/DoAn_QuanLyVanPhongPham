@@ -3,6 +3,8 @@ package dao;
 import model.SanPham;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class SanPhamDAO {
@@ -12,9 +14,7 @@ public class SanPhamDAO {
         List<SanPham> list = new ArrayList<>();
         String sql = "SELECT * FROM SanPham";
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 SanPham sp = new SanPham(
@@ -32,7 +32,8 @@ public class SanPhamDAO {
                 list.add(sp);
             }
 
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         return list;
     }
 
@@ -41,8 +42,7 @@ public class SanPhamDAO {
         String sql = "INSERT INTO SanPham(tenSanPham, loaiId, nhaCungCapId, moTa, giaNhap, giaBan, tonKho, hinhAnh, trangThai) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, sp.getTenSanPham());
             ps.setInt(2, sp.getLoaiId());
@@ -56,7 +56,8 @@ public class SanPhamDAO {
 
             return ps.executeUpdate() > 0;
 
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         return false;
     }
 
@@ -65,8 +66,7 @@ public class SanPhamDAO {
         String sql = "UPDATE SanPham SET tenSanPham=?, loaiId=?, nhaCungCapId=?, moTa=?, giaNhap=?, giaBan=?, tonKho=?, hinhAnh=?, trangThai=? "
                 + "WHERE sanPhamId=?";
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, sp.getTenSanPham());
             ps.setInt(2, sp.getLoaiId());
@@ -81,7 +81,8 @@ public class SanPhamDAO {
 
             return ps.executeUpdate() > 0;
 
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         return false;
     }
 
@@ -89,44 +90,43 @@ public class SanPhamDAO {
     public boolean delete(int id) {
         String sql = "DELETE FROM SanPham WHERE sanPhamId=?";
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;
 
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         return false;
     }
-    
+
     public SanPham getSanPhamById(int sanPhamId) {
-        String sql = "SELECT * FROM SanPham WHERE sanPhamId = ?";
-        SanPham sp = null;
+    String sql = "SELECT * FROM SanPham WHERE sanPhamId = ?";
+    SanPham sp = null;
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, sanPhamId);
-            ResultSet rs = ps.executeQuery();
+        ps.setInt(1, sanPhamId);
+        ResultSet rs = ps.executeQuery();
 
-            if (rs.next()) {
-                sp = new SanPham(
-                        rs.getInt("sanPhamId"),
-                        rs.getString("tenSanPham"),
-                        rs.getInt("loaiId"),
-                        rs.getInt("nhaCungCapId"),
-                        rs.getString("moTa"),
-                        rs.getDouble("giaNhap"),
-                        rs.getDouble("giaBan"),
-                        rs.getInt("tonKho"),
-                        rs.getString("hinhAnh"),
-                        rs.getString("trangThai")
-                );
-            }
-
-        } catch (Exception e) { }
-        return sp;
-    }
+        if (rs.next()) {
+            sp = new SanPham(
+                    rs.getInt("sanPhamId"),
+                    rs.getString("tenSanPham"),
+                    rs.getInt("loaiId"),
+                    rs.getInt("nhaCungCapId"),
+                    rs.getString("moTa"),
+                    rs.getDouble("giaNhap"),
+                    rs.getDouble("giaBan"),
+                    rs.getInt("tonKho"),
+                    rs.getString("hinhAnh"),
+                    rs.getString("trangThai")
+            );
+        }
+    } catch (Exception e) { }
+    return sp;
+}
 
     // Lấy danh sách sản phẩm Flash Sale (ví dụ 5 sản phẩm)
     public ArrayList<SanPham> getSanPhamFlashSale(int soLuong) {
@@ -134,8 +134,7 @@ public class SanPhamDAO {
         // Giả sử Flash Sale là các sản phẩm có giá bán thấp hơn giá nhập hoặc tồn kho cao
         String sql = "SELECT * FROM SanPham WHERE tonKho > 0 ORDER BY sanPhamId DESC LIMIT " + soLuong;
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ResultSet rs = ps.executeQuery();
 
@@ -154,7 +153,8 @@ public class SanPhamDAO {
                 ));
             }
 
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         return list;
     }
 
@@ -164,8 +164,7 @@ public class SanPhamDAO {
         // Giả sử "Dành cho bạn" là những sản phẩm giá cao nhất còn hàng
         String sql = "SELECT * FROM SanPham WHERE tonKho > 0 ORDER BY giaBan DESC LIMIT " + soLuong;
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ResultSet rs = ps.executeQuery();
 
@@ -184,19 +183,37 @@ public class SanPhamDAO {
                 ));
             }
 
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         return list;
     }
-    
-    // Tìm kiếm theo tên
-    public ArrayList<SanPham> search(String keyword) {
+
+    public ArrayList<SanPham> searchAndFilter(String keyword, Double minGia, Double maxGia, String sortMode) {
         ArrayList<SanPham> list = new ArrayList<>();
-        String sql = "SELECT * FROM SanPham WHERE tenSanPham LIKE ?";
+        
+        // 1. Xây dựng câu SQL động một cách AN TOÀN
+        StringBuilder sql = new StringBuilder("SELECT * FROM SanPham WHERE tenSanPham LIKE ?");
+        List<Object> params = new ArrayList<>(); // Danh sách để chứa các tham số ?
+        params.add("%" + keyword + "%");
+
+        // Lọc giá (lọc trên giaBan, là giá gốc/niêm yết)
+        if (minGia != null) {
+            sql.append(" AND giaBan >= ?");
+            params.add(minGia);
+        }
+        if (maxGia != null) {
+            sql.append(" AND giaBan <= ?");
+            params.add(maxGia);
+        }
 
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
 
-            ps.setString(1, "%" + keyword + "%");
+            // 2. Gán các tham số vào câu lệnh an toàn
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+            
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -215,16 +232,38 @@ public class SanPhamDAO {
             }
 
         } catch (Exception e) { }
+
+        // 3. Sắp xếp danh sách trong JAVA (dùng sp.getGiaKhuyenMai())
+        if (sortMode == null) {
+            sortMode = "popular";
+        }
+        
+        // (Sử dụng cú pháp lambda cho gọn)
+        switch (sortMode) {
+            case "price_asc": // Giá tăng dần (theo giá khuyến mãi)
+                list.sort(Comparator.comparingDouble(SanPham::getGiaKhuyenMai));
+                break;
+            case "price_desc": // Giá giảm dần (theo giá khuyến mãi)
+                list.sort(Comparator.comparingDouble(SanPham::getGiaKhuyenMai).reversed());
+                break;
+            case "newest": // Mới nhất (theo ID)
+                list.sort(Comparator.comparingInt(SanPham::getSanPhamId).reversed());
+                break;
+            case "popular": // Phổ biến
+            default:
+                // (Bạn có thể đổi logic "popular" nếu muốn, ví dụ theo tồn kho)
+                break;
+        }
+
         return list;
     }
-    
+
     // Lấy danh sách sản phẩm thuộc danh mục (loaiId) 
     public ArrayList<SanPham> getSanPhamByLoaiId(int loaiId) {
         ArrayList<model.SanPham> list = new ArrayList<>();
         String sql = "SELECT * FROM SanPham WHERE loaiId = ?";
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, loaiId);
             ResultSet rs = ps.executeQuery();
@@ -244,7 +283,91 @@ public class SanPhamDAO {
                 ));
             }
 
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         return list;
+    }
+
+    public ArrayList<SanPham> getSanPhamByFilterAndSort(Integer loaiId, Double minGia, Double maxGia, String sortMode) {
+        ArrayList<SanPham> list = new ArrayList<>();
+
+        // 1. Xây dựng câu SQL động một cách AN TOÀN
+        StringBuilder sql = new StringBuilder("SELECT * FROM SanPham WHERE 1=1");
+        List<Object> params = new ArrayList<>(); // Danh sách để chứa các tham số ?
+
+        if (loaiId != null && loaiId > 0) {
+            sql.append(" AND loaiId = ?");
+            params.add(loaiId);
+        }
+
+        // LƯU Ý: Lọc theo GIÁ GỐC (sp.getGiaBan())
+        // Nếu bạn muốn lọc theo GIÁ KHUYẾN MÃI (sp.getGiaKhuyenMai()),
+        // logic này phải được thực hiện trong Java (sau khi lấy list)
+        if (minGia != null) {
+            sql.append(" AND giaBan >= ?");
+            params.add(minGia);
+        }
+        if (maxGia != null) {
+            sql.append(" AND giaBan <= ?");
+            params.add(maxGia);
+        }
+
+        // (Tạm thời bỏ ORDER BY trong SQL để sắp xếp trong Java cho linh hoạt)
+        // sql.append(" ORDER BY giaBan ASC");
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            // 2. Gán các tham số vào câu lệnh an toàn
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                // (Bạn phải đảm bảo constructor này đúng với Model SanPham của bạn)
+                list.add(new SanPham(
+                        rs.getInt("sanPhamId"),
+                        rs.getString("tenSanPham"),
+                        rs.getInt("loaiId"),
+                        rs.getInt("nhaCungCapId"),
+                        rs.getString("moTa"),
+                        rs.getDouble("giaNhap"),
+                        rs.getDouble("giaBan"),
+                        rs.getInt("tonKho"),
+                        rs.getString("hinhAnh"),
+                        rs.getString("trangThai")
+                ));
+            }
+
+        } catch (Exception e) { }
+
+        // 3. (MỚI) Sắp xếp danh sách trong JAVA
+        // (Sao chép logic từ DanhMucSanPham.java vào đây)
+        if (sortMode == null) {
+            sortMode = "popular";
+        }
+
+        switch (sortMode) {
+            case "price_asc": // Giá tăng dần (theo giá khuyến mãi)
+                Collections.sort(list, Comparator.comparingDouble(SanPham::getGiaKhuyenMai));
+                break;
+            case "price_desc": // Giá giảm dần (theo giá khuyến mãi)
+                Collections.sort(list, Comparator.comparingDouble(SanPham::getGiaKhuyenMai).reversed());
+                break;
+            case "newest": // Mới nhất (theo ID)
+                Collections.sort(list, Comparator.comparingInt(SanPham::getSanPhamId).reversed());
+                break;
+            case "popular": // Phổ biến (ví dụ: theo tồn kho)
+            default:
+                Collections.sort(list, Comparator.comparingInt(SanPham::getTonKho).reversed());
+                break;
+        }
+        return list;
+    }
+
+    // (Bạn cũng cần hàm getSanPhamByLoaiId cho các link không có bộ lọc)
+    public ArrayList<SanPham> getSanPhamByLoaiId1(int loaiId) {
+        // Gọi hàm mới với các bộ lọc là null
+        return getSanPhamByFilterAndSort(loaiId, null, null, "popular");
     }
 }

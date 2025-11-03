@@ -1,4 +1,7 @@
 package model;
+import dao.DanhGiaDAO;
+import java.util.List;
+import model.DanhGiaSanPham;
 
 public class SanPham {
     private int sanPhamId;
@@ -78,5 +81,20 @@ public class SanPham {
         
         // 4. Làm tròn tiền (ví dụ: làm tròn đến 100đ)
         return Math.round(giaCuoiCung / 100.0) * 100;
+    }
+    
+    public List<DanhGiaSanPham> getListDanhGia() {
+        DanhGiaDAO dao = new DanhGiaDAO();
+        return dao.getBySanPhamId(this.sanPhamId); 
+    }
+
+    public double getDiemTrungBinh() {
+        DanhGiaDAO dao = new DanhGiaDAO();
+        return dao.getDiemTrungBinh(this.sanPhamId);
+    }
+
+    public int getTongDanhGia() {
+        DanhGiaDAO dao = new DanhGiaDAO();
+        return dao.getTongDanhGia(this.sanPhamId);
     }
 }

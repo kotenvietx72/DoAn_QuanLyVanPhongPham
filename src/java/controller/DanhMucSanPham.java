@@ -5,74 +5,96 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import model.*;
 import dao.*;
 import java.util.ArrayList;
+import jakarta.servlet.annotation.WebServlet; 
+import java.util.HashMap;
+import java.util.Map;
 
+@WebServlet("/danh-muc") 
 public class DanhMucSanPham extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
 
-        // 1. Lấy mã danh mục từ URL (ví dụ: ?loai=but-bi)
-        String loaiIdentifier = request.getParameter("loai"); // Lấy giá trị của tham số 'loai'
-
-        // --- Kiểm tra tham số ---
-        if (loaiIdentifier == null || loaiIdentifier.trim().isEmpty()) {
-            // Nếu không có tham số 'loai', có thể chuyển về trang chủ hoặc báo lỗi
-            response.sendRedirect("trang-chu");
-            return;
-        }
-
         try {
-            // --- Khởi tạo DAO ---
-            SanPhamDAO sanPhamDAO = new SanPhamDAO();
-            LoaiSanPhamDAO loaiSanPhamDAO = new LoaiSanPhamDAO(); // Để lấy tên Loại
+            // 1. Lấy tất cả tham số
+            String idStr = request.getParameter("loaiId"); 
+            String priceRange = request.getParameter("priceRange");
+            String sortMode = request.getParameter("sort");
 
-            // --- Lấy thông tin Loại Sản Phẩm ---
-            // Giả sử bạn có hàm lấy LoaiSanPham dựa vào identifier (ví dụ: "but-bi")
-            // Hoặc bạn cần chuyển identifier thành ID rồi gọi hàm getLoaiSanPhamById(id)
-            LoaiSanPham loaiSP = loaiSanPhamDAO.getLoaiSanPhamByIdentifier(loaiIdentifier); // Thay hàm này bằng hàm của bạn
-
-            String tenDanhMuc = "Sản phẩm"; // Tên mặc định nếu không tìm thấy loại
-            int loaiId = -1; // ID mặc định
-            if (loaiSP != null) {
-                tenDanhMuc = loaiSP.getTenLoai(); // Lấy tên đúng (ví dụ: "Bút bi")
-                loaiId = loaiSP.getLoaiId(); // Lấy ID để truy vấn sản phẩm
-            } else {
-                 // Xử lý trường hợp không tìm thấy loại SP với identifier này (ví dụ: báo lỗi)
-                 System.out.println("Không tìm thấy loại sản phẩm: " + loaiIdentifier);
-                 // Có thể chuyển về trang chủ hoặc trang lỗi
-                 response.sendRedirect("trang-chu");
-                 return;
+            // 2. Kiểm tra LoaiId
+            if (idStr == null || idStr.trim().isEmpty()) {
+                response.sendRedirect("trang-chu");
+                return;
+            }
+            
+            // 3. Đặt giá trị mặc định cho Sắp xếp
+            if (sortMode == null || sortMode.trim().isEmpty()) {
+                sortMode = "popular";
             }
 
+            int loaiId = Integer.parseInt(idStr); 
 
-            // --- Lấy danh sách sản phẩm thuộc danh mục đó ---
-            // Giả sử bạn có hàm lấy SanPham theo loaiId
-            ArrayList<SanPham> listSanPhamTheoDanhMuc = sanPhamDAO.getSanPhamByLoaiId(loaiId); // Thay hàm này bằng hàm của bạn
+            // --- Khởi tạo DAO ---
+            SanPhamDAO sanPhamDAO = new SanPhamDAO();
+            LoaiSanPhamDAO loaiSanPhamDAO = new LoaiSanPhamDAO(); 
+            DanhGiaDAO danhGiaDAO = new DanhGiaDAO(); // <-- THÊM DAO ĐÁNH GIÁ
 
-            // --- Gửi dữ liệu sang JSP ---
-            request.setAttribute("tenDanhMuc", tenDanhMuc); // Gửi tên danh mục (ví dụ: "Bút bi")
-            request.setAttribute("listSanPhamTheoDanhMuc", listSanPhamTheoDanhMuc); // Gửi danh sách sản phẩm
+            // --- Lấy tên danh mục ---
+            LoaiSanPham loaiSP = loaiSanPhamDAO.getLoaiSanPhamById(loaiId); 
+            String tenDanhMuc = (loaiSP != null) ? loaiSP.getTenLoai() : "Sản phẩm";
 
-            // --- (Tùy chọn) Gửi thêm dữ liệu lọc ---
-            // Ví dụ: Lấy danh sách tất cả Loại Sản Phẩm để hiển thị trong bộ lọc sidebar
-            // List<LoaiSanPham> allLoaiSP = loaiSanPhamDAO.getAllLoaiSanPham();
-            // request.setAttribute("allLoaiSP", allLoaiSP);
+            // 4. Xử lý khoảng giá
+            Double minGia = null;
+            Double maxGia = null;
+            
+            if (priceRange != null && !priceRange.isEmpty()) {
+                switch (priceRange) {
+                    case "0-50000": minGia = 0.0; maxGia = 50000.0; break;
+                    case "50000-100000": minGia = 50000.0; maxGia = 100000.0; break;
+                    case "100000-200000": minGia = 100000.0; maxGia = 200000.0; break;
+                    case "200000-500000": minGia = 200000.0; maxGia = 500000.0; break;
+                    case "500000-max": minGia = 500000.0; maxGia = null; break;
+                }
+            }
 
-            // --- Chuyển hướng đến file JSP ---
-            request.getRequestDispatcher("danhmucsanpham.jsp").forward(request, response);
+            // 5. Gọi hàm DAO (Hàm này cần được sửa trong DAO)
+            ArrayList<SanPham> listSanPhamTheoDanhMuc = sanPhamDAO.getSanPhamByFilterAndSort(loaiId, minGia, maxGia, sortMode);
 
-        } catch (ServletException | IOException e) {
+            // =============================================
+            // (MỚI) TẠO MAP ĐỂ CHỨA ĐÁNH GIÁ
+            // =============================================
+            Map<Integer, Double> mapDiemTrungBinh = new HashMap<>();
+            Map<Integer, Integer> mapTongDanhGia = new HashMap<>();
+
+            for (SanPham sp : listSanPhamTheoDanhMuc) {
+                mapDiemTrungBinh.put(sp.getSanPhamId(), danhGiaDAO.getDiemTrungBinh(sp.getSanPhamId()));
+                mapTongDanhGia.put(sp.getSanPhamId(), danhGiaDAO.getTongDanhGia(sp.getSanPhamId()));
+            }
+            // =============================================
+            
+            // 6. Gửi dữ liệu sang JSP
+            request.setAttribute("tenDanhMuc", tenDanhMuc); 
+            request.setAttribute("listSanPhamTheoDanhMuc", listSanPhamTheoDanhMuc);
+            request.setAttribute("sortMode", sortMode); 
+            request.setAttribute("selectedPriceRange", priceRange); 
+            
+            // (MỚI) Gửi 2 Map sang JSP
+            request.setAttribute("mapDiemTrungBinh", mapDiemTrungBinh);
+            request.setAttribute("mapTongDanhGia", mapTongDanhGia);
+
+            // SỬA ĐƯỜNG DẪN NÀY NẾU FILE JSP CỦA BẠN NẰM Ở THƯ MỤC GỐC
+            request.getRequestDispatcher("view/danhmucsanpham.jsp").forward(request, response);
+
+        } catch (ServletException | IOException | NumberFormatException e) { // In lỗi ra
+            // In lỗi ra
             throw new ServletException("Lỗi khi tải trang danh mục", e);
-            // Hoặc chuyển sang trang lỗi
-            // request.setAttribute("errorMessage", "Lỗi khi tải danh mục sản phẩm.");
-            // request.getRequestDispatcher("error.jsp").forward(request, response);
         }
     }
 
