@@ -17,76 +17,8 @@
         <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
-            <div class="container-fluid">
-                <a class="navbar-brand fw-bold" href="${pageContext.request.contextPath}/trang-chu">
-                    <img src="${pageContext.request.contextPath}/assets/image/logo.png" alt="Logo"> 3AE
-                </a>
-                <form class="d-flex mx-auto w-50" action="tim-kiem" method="GET">
-                    <input class="form-control me-2" type="search" name="keyword" placeholder="Tìm kiếm sản phẩm...">
-                    <button class="btn btn-light" type="submit">
-                        <i class="bi bi-search"></i>
-                    </button>
-                </form>
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link text-white" href="dang-nhap">Đăng nhập</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="dang-ky">Đăng ký</a></li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="gio-hang">
-                            🛒 Giỏ hàng <span class="badge bg-danger">0</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-        <nav class="navbar navbar-expand-lg bg-white shadow-sm category-nav-custom">
-            <div class="container-fluid">
-                <div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" href="danh-muc?loaiId=1">
-                                <i class="bi bi-pen-fill"></i> Bút - Viết
-                            </a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownVoSach" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-journal-bookmark-fill"></i> Sổ - Vở - Sách
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownVoSach">
-                                <li><a class="dropdown-item" href="danh-muc?loaiId=8">Sổ / Vở</a></li>
-                                <li><a class="dropdown-item" href="danh-muc?loaiId=7">Sách</a></li>
-                                <li><a class="dropdown-item" href="danh-muc?loaiId=6">Nhãn vở</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownHocTap" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-rulers"></i> Dụng cụ học tập
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownHocTap">
-                                <li><a class="dropdown-item" href="danh-muc?loaiId=2">Dụng cụ học sinh</a></li>
-                                <li><a class="dropdown-item" href="danh-muc?loaiId=5">Hộp bút / Ba lô</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownVanPhong" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-folder-fill"></i> Văn phòng phẩm
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownVanPhong">
-                                <li><a class="dropdown-item" href="danh-muc?loaiId=2">Bìa hồ sơ / Bảng viết</a></li>
-                                <li><a class="dropdown-item" href="danh-muc?loaiId=4">Giấy in</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="danh-muc?loaiId=3">
-                                <i class="bi bi-calculator-fill"></i> Máy tính
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        <%-- KẾT THÚC HEADER --%>
-
+        <jsp:include page="_header.jsp" />
+        
         <div class="container category-container my-4">
             <nav aria-label="breadcrumb" class="mb-4">
                 <ol class="breadcrumb">
@@ -259,49 +191,7 @@
             </div> 
         </div> 
 
-        <%-- PASTE FOOTER CỦA BẠN VÀO ĐÂY --%>
-        <footer class="site-footer pt-4 pb-3 mt-5">
-            <div class="container text-center text-md-start">
-                <div class="row">
-                    <div class="col-md-3 col-lg-4 col-xl-3 mx-auto">
-                        <a class="navbar-brand fw-bold mb-2" href="${pageContext.request.contextPath}/trang-chu">
-                            <img src="${pageContext.request.contextPath}/assets/image/logo.png" alt="Logo"> VPP 3 Anh Em
-                        </a>
-                        <p>
-                            Chuyên cung cấp các sản phẩm văn phòng phẩm, dụng cụ học sinh
-                            chính hãng, chất lượng cao.
-                        </p>
-                    </div>
-                    <div class="col-md-2 col-lg-2 col-xl-2 mx-auto">
-                        <h6 class="text-uppercase fw-bold mb-4">Chính sách</h6>
-                        <p><a href="#!">Chính sách bảo mật</a></p>
-                        <p><a href="#!">Chính sách đổi trả</a></p>
-                        <p><a href="#!">Chính sách giao hàng</a></p>
-                    </div>
-                    <div class="col-md-3 col-lg-2 col-xl-2 mx-auto">
-                        <h6 class="text-uppercase fw-bold mb-4">Liên kết</h6>
-                        <p><a href="#!">Về chúng tôi</a></p>
-                        <p><a href="#!">Cửa hàng</a></p>
-                        <p><a href="#!">Hỗ trợ</a></p>
-                    </div>
-                    <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0">
-                        <h6 class="text-uppercase fw-bold mb-4">Liên hệ</h6>
-                        <p><i class="bi bi-geo-alt-fill"></i> Lĩnh Nam - Hà Nội</p>
-                        <p><i class="bi bi-envelope-fill"></i> support@3ae.vn</p>
-                        <p><i class="bi bi-telephone-fill"></i> 0123 456 789</p>
-                    </div>
-                </div>
-            </div>
-        </footer>
-
-        <div class="copyright-bar">
-            <div class="container text-center p-3">
-                © 2025 Copyright:
-                <a class="fw-bold" href="#">VPP-3AE.com</a>
-            </div>
-        </div>
-        <%-- KẾT THÚC FOOTER --%>
-
+        <jsp:include page="_footer.jsp" />  
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

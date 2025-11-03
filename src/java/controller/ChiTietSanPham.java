@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import model.*;
 import dao.SanPhamDAO;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/chi-tiet-san-pham")
 public class ChiTietSanPham extends HttpServlet {
@@ -36,8 +37,12 @@ public class ChiTietSanPham extends HttpServlet {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND, "Không tìm thấy sản phẩm.");
                 return;
             }
+            
+            HttpSession session = request.getSession();
+            NguoiDung authUser = (NguoiDung) session.getAttribute("authUser");
 
             request.setAttribute("sanPham", sanPham); 
+            request.setAttribute("authUser", authUser);
             
             request.getRequestDispatcher("view/chitietsanpham.jsp").forward(request, response);
 

@@ -276,3 +276,60 @@
   line-height: 1.7;
   color: #333;
 }
+
+.rating-stars-input {
+    display: inline-block;
+    border: none;
+}
+
+/* Ẩn các radio button gốc */
+.rating-stars-input > input {
+    display: none;
+}
+
+/* Hiển thị các label (ngôi sao) */
+.rating-stars-input > label {
+    color: #ddd; /* Màu sao mờ */
+    float: right; /* Đảo ngược thứ tự sao (quan trọng) */
+    font-size: 1.8rem;
+    padding: 0 2px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+/* Thêm icon ngôi sao bằng ::before */
+.rating-stars-input > label::before {
+    content: '\F586'; /* Mã Unicode của icon bi-star */
+    font-family: 'bootstrap-icons';
+}
+
+/* Khi hover vào một sao, nó và các sao bên PHẢI nó sẽ sáng lên */
+.rating-stars-input > label:hover,
+.rating-stars-input > label:hover ~ label {
+    color: #ffc107; /* Màu vàng */
+}
+.rating-stars-input > label:hover::before,
+.rating-stars-input > label:hover ~ label::before {
+    content: '\F586'; /* bi-star */
+}
+
+/* Khi chọn 1 sao (checked), nó và các sao bên PHẢI nó sẽ sáng */
+.rating-stars-input > input:checked ~ label {
+    color: #ffc107;
+}
+.rating-stars-input > input:checked ~ label::before {
+    content: '\F588'; /* Mã Unicode của icon bi-star-fill */
+}
+
+/* CSS cho danh sách bình luận (nếu quá dài) */
+.reviews-list {
+    max-height: 500px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+.review-author strong {
+    font-weight: 600;
+}
+.review-content p {
+    color: #333;
+}
