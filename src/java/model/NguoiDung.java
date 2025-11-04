@@ -1,6 +1,8 @@
 package model;
 
+import dao.NguoiDungDAO;
 import java.util.Date;
+import java.util.List;
 
 public class NguoiDung {
     private int nguoiDungId;
@@ -48,4 +50,14 @@ public class NguoiDung {
 
     public int getRoleId() { return roleId; }
     public void setRoleId(int roleId) { this.roleId = roleId; }
+    
+    public int getTongSanPhamTrongGioHang() {
+        NguoiDungDAO dao = new NguoiDungDAO();
+        return dao.getTongSanPham(this.nguoiDungId);
+    }
+
+    public List<SanPham> getDanhSachSanPhamTrongGioHang() {
+        NguoiDungDAO dao = new NguoiDungDAO();
+        return dao.getDanhSachSanPhamTrongGio(this.nguoiDungId);
+    }
 }

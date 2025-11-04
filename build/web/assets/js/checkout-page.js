@@ -1,114 +1,108 @@
-/* ======================================= */
-/* JS FOR CHECKOUT PAGE
-/* ======================================= */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
 
-    // --- Show/Hide Available Discount Codes ---
-    const showDiscountsLink = document.querySelector('.show-discounts-link');
-    const discountTagsDiv = document.querySelector('.discount-tags');
-
-    if (showDiscountsLink && discountTagsDiv) {
-        showDiscountsLink.addEventListener('click', function(event) {
-            event.preventDefault(); // Prevent default link behavior
-            if (discountTagsDiv.style.display === 'none') {
-                discountTagsDiv.style.display = 'flex'; // Or 'block'
-                this.innerHTML = '<i class="bi bi-tag-fill"></i> Ẩn mã giảm giá';
-            } else {
-                discountTagsDiv.style.display = 'none';
-                this.innerHTML = '<i class="bi bi-tag-fill"></i> Xem thêm mã giảm giá';
-            }
-        });
-    }
-
-    // --- Apply Discount Code from Tag ---
-    const discountCodeInput = document.getElementById('discountCodeInput');
-    const discountTagButtons = document.querySelectorAll('.btn-discount-tag');
-
-    if (discountCodeInput && discountTagButtons) {
-        discountTagButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const code = this.dataset.code; // Get code from data-code attribute
-                discountCodeInput.value = code;
-                // Optionally, hide the tags again
-                // if (discountTagsDiv) discountTagsDiv.style.display = 'none';
-                // if (showDiscountsLink) showDiscountsLink.innerHTML = '<i class="bi bi-tag-fill"></i> Xem thêm mã giảm giá';
-            });
-        });
-    }
-
-    // --- TODO: Handle "Apply Discount" Button Click ---
-    const applyDiscountBtn = document.getElementById('applyDiscountBtn');
-    if(applyDiscountBtn && discountCodeInput){
-        applyDiscountBtn.addEventListener('click', function(){
-            const code = discountCodeInput.value.trim();
-            if(code){
-                console.log("Applying discount code:", code);
-                // !!! TODO: Add AJAX call here to validate code and update totals !!!
-                // validateAndApplyDiscount(code);
-            } else {
-                alert("Vui lòng nhập mã giảm giá.");
-            }
-        });
-    }
-
+    // --- QR Thanh Toán ---
     const checkoutForm = document.querySelector('.shipping-info-wrapper form');
-    const continueButton = checkoutForm.querySelector('.btn-continue');
-    const qrModalElement = document.getElementById('qrPaymentModal'); // Lấy phần tử Modal
+    const continueButton = checkoutForm?.querySelector('.btn-continue');
+    const qrModalElement = document.getElementById('qrPaymentModal');
     const qrCanvas = document.getElementById('qrcodeCanvas');
     const qrAmountSpan = document.getElementById('qrAmount');
     const qrContentSpan = document.getElementById('qrContent');
-    
-    // Tạo đối tượng Modal của Bootstrap từ phần tử HTML
-    const qrModal = new bootstrap.Modal(qrModalElement); 
+    const btnPaid = document.querySelector('.btn-success'); // Nút “Tôi đã thanh toán”
+
+    // Tạo đối tượng Modal của Bootstrap
+    const qrModal = qrModalElement ? new bootstrap.Modal(qrModalElement) : null;
 
     if (continueButton && checkoutForm && qrModalElement && qrCanvas && qrAmountSpan && qrContentSpan) {
-        continueButton.addEventListener('click', function(event) {
-            // 1. Ngăn form gửi đi
+
+        // Khi nhấn nút "Tiếp tục đến phương thức thanh toán"
+        continueButton.addEventListener('click', function (event) {
             event.preventDefault();
 
-            // 2. Kiểm tra form hợp lệ
+            // Kiểm tra form hợp lệ
             if (!checkoutForm.checkValidity()) {
                 checkoutForm.reportValidity();
-                return; 
+                return;
             }
 
-            // 3. Lấy thông tin cần thiết (Lấy trước khi mở modal)
-            const amountText = document.querySelector('.grand-total').textContent.replace(/[^0-9]/g, '');
-            const orderId = "DH" + new Date().getTime(); 
+            // Lấy tổng tiền (chỉ giữ số)
+            const amountText = document.querySelector('.grand-total')
+                    .textContent.replace(/[^0-9]/g, '');
 
-            // Cập nhật số tiền và nội dung lên giao diện (có thể làm trước hoặc sau khi modal hiện)
+            // Tạo mã đơn hàng
+            const orderId = "DH" + new Date().getTime();
+
+            // Cập nhật vào giao diện
             qrAmountSpan.textContent = parseInt(amountText).toLocaleString('vi-VN') + '₫';
-            qrContentSpan.textContent = orderId; 
+            qrContentSpan.textContent = orderId;
 
-            // 4. MỞ CỬA SỔ MODAL
-            qrModal.show(); 
+            // Hiển thị modal
+            qrModal.show();
         });
 
-        // 5. LẮNG NGHE SỰ KIỆN KHI MODAL ĐÃ HIỆN RA HOÀN TOÀN
         qrModalElement.addEventListener('shown.bs.modal', function () {
-            // Chỉ tạo QR KHI modal đã hiển thị (đảm bảo canvas tồn tại và có kích thước)
-            
-            // Lấy lại thông tin (hoặc dùng biến đã lấy trước đó)
-            const amountText = document.querySelector('.grand-total').textContent.replace(/[^0-9]/g, ''); 
+            // --- Thông tin cố định ---
+            const bankBin = "970436"; // Vietcombank
+            const accountNumber = "1018386755";
+            const accountName = "NGUYEN VIET ANH";
+
+            // --- Lấy thông tin đơn hàng ---
+            const amountText = document.querySelector('.grand-total')
+                    .textContent.replace(/[^0-9]/g, '');
             const orderId = qrContentSpan.textContent;
 
-            // TẠO NỘI DUNG MÃ VIETQR (Ví dụ - NHỚ THAY THÔNG TIN CỦA BẠN)
-            const bankBin = "970418"; // Vietcombank
-            const accountNumber = "1234567890"; // SỐ TK CỦA BẠN
-            const accountName = "TEN CHU THE"; // TÊN CỦA BẠN
-            const description = orderId; 
-            const qrCodeContent = `https://img.vietqr.io/image/${bankBin}-${accountNumber}-print.png?amount=${amountText}&addInfo=${description}&accountName=${encodeURIComponent(accountName)}`;
+            // --- Tạo timestamp để tránh cache ---
+            const cacheBuster = new Date().getTime();
 
-            // Xóa mã QR cũ và Vẽ mã QR mới
-            qrCanvas.innerHTML = ''; // Xóa canvas cũ
-            new QRCode(qrCanvas, {
-                text: qrCodeContent, 
-                width: 200,         
-                height: 200,
-                colorDark : "#000000",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.H 
-            });
+            // --- Tạo QR chính xác chuẩn VietQR ---
+            const qrImageUrl = `https://img.vietqr.io/image/${bankBin}-${accountNumber}-print.png?amount=${amountText}&addInfo=${orderId}&accountName=${encodeURIComponent(accountName)}&t=${cacheBuster}`;
+
+            // --- Gắn trực tiếp QR vào modal ---
+            qrCanvas.innerHTML = `
+                <div class="text-center">
+                    <div class="bg-white p-3 rounded shadow-sm d-inline-block">
+                        <img src="${qrImageUrl}" 
+                             alt="VietQR" 
+                             class="img-fluid" 
+                             border-radius:10px;">
+                    </div>
+                </div>
+            `;
         });
+
+
+        if (btnPaid) {
+            btnPaid.addEventListener('click', function () {
+                const modalBody = qrModalElement.querySelector('.modal-body');
+
+                // Xóa nội dung cũ (ẩn QR)
+                modalBody.innerHTML = `
+        <div class="text-center py-5">
+            <div class="alert alert-success d-inline-block" role="alert">
+                <i class="bi bi-check-circle-fill"></i>
+                <span class="ms-2">Thanh toán thành công! Cảm ơn bạn ❤️</span>
+            </div>
+        </div>
+    `;
+
+                // Gọi servlet xóa giỏ hàng
+                fetch('xoa-gio-hang', {method: 'POST'})
+                        .then(res => res.text())
+                        .then(text => console.log('Kết quả xóa giỏ hàng:', text))
+                        .catch(err => console.error('Lỗi khi xóa giỏ hàng:', err));
+
+                // Đợi 2 giây cho người dùng thấy thông báo
+                setTimeout(() => {
+                    const bsModal = bootstrap.Modal.getInstance(qrModalElement);
+                    if (bsModal)
+                        bsModal.hide();
+
+                    // Quay lại trang giỏ hàng sau khi đóng modal
+                    setTimeout(() => {
+                        window.location.href = 'xem-gio-hang';
+                    }, 500);
+                }, 2000);
+            });
+
+        }
     }
 });

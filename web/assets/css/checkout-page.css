@@ -225,3 +225,14 @@ hr {
 #qrPaymentModal .btn-close {
     filter: invert(1) grayscale(100%) brightness(200%);
 }
+
+.qr-payment-wrapper img {
+    border: 2px solid #eee;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.qr-payment-wrapper p {
+    margin-bottom: 4px;
+    font-size: 14px;
+}

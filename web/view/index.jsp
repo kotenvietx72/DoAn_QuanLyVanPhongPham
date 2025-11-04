@@ -17,13 +17,22 @@
             <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="${pageContext.request.contextPath}/assets/image/banner/banner1.jpg" class="d-block w-100" alt="Banner 1">
+                        <img src="${pageContext.request.contextPath}/assets/image/banner/banner_tonghop.jpg" class="d-block w-100" alt="Banner tổng hợp">
                     </div>
                     <div class="carousel-item">
-                        <img src="${pageContext.request.contextPath}/assets/image/banner/banner2.jpg" class="d-block w-100" alt="Banner 2">
+                        <img src="${pageContext.request.contextPath}/assets/image/banner/banner_tonghop2.jpg" class="d-block w-100" alt="Banner tổng hợp 2">
                     </div>
                     <div class="carousel-item">
-                        <img src="${pageContext.request.contextPath}/assets/image/banner/banner3.jpg" class="d-block w-100" alt="Banner 3">
+                        <img src="${pageContext.request.contextPath}/assets/image/banner/banner_but.jpg" class="d-block w-100" alt="Banner bút">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="${pageContext.request.contextPath}/assets/image/banner/banner_giayin.jpg" class="d-block w-100" alt="Banner giấy in">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="${pageContext.request.contextPath}/assets/image/banner/banner_maytinh.jpg" class="d-block w-100" alt="Banner máy tính">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="${pageContext.request.contextPath}/assets/image/banner/butlong.jpg" class="d-block w-100" alt="Banner bút lông">
                     </div>
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
@@ -68,12 +77,28 @@
                                         <span class="old-price"><fmt:formatNumber value="${giaCu}" type="currency" currencySymbol="" minFractionDigits="0"/>₫</span>
                                     </div>
                                     <div class="rating-stars mt-2">
-                                        <i class="bi bi-star"></i><i class="bi bi-star"></i><i class="bi bi-star"></i><i class="bi bi-star"></i><i class="bi bi-star"></i>
-                                        <span class="rating-count">(0)</span>
+                                        <%-- Lấy giá trị trực tiếp từ hàm của SanPham --%>
+                                        <c:set var="diemTB" value="${sp.diemTrungBinh}" /> 
+                                        <c:set var="tongDG" value="${sp.tongDanhGia}" />
+
+                                        <c:set var="diemTron" value="${Math.round(diemTB * 2) / 2.0}" />
+
+                                        <c:forEach begin="1" end="5" var="i">
+                                            <c:choose>
+                                                <c:when test="${diemTron >= i}"><i class="bi bi-star-fill"></i></c:when>
+                                                <c:when test="${diemTron >= (i - 0.5)}"><i class="bi bi-star-half"></i></c:when>
+                                                <c:otherwise><i class="bi bi-star"></i></c:otherwise>
+                                            </c:choose>
+                                        </c:forEach>
+                                        <span class="rating-count">(${tongDG})</span>
                                     </div>
                                 </div>
                                 <div class="card-footer">
-                                    <a href="chi-tiet-san-pham?productId=${sp.sanPhamId}&quantity=1" class="btn btn-add-cart w-100">THÊM VÀO GIỎ</a>
+                                    <button 
+                                        class="btn btn-add-cart w-100 add-to-cart-btn"
+                                        data-product-id="${sp.sanPhamId}">
+                                        <i class="bi bi-cart-plus"></i> THÊM VÀO GIỎ
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -154,5 +179,7 @@
                     
         <jsp:include page="_footer.jsp" />
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/add-to-cart.css">
+        <script src="${pageContext.request.contextPath}/assets/js/add-to-cart.js"></script>
     </body>
 </html>

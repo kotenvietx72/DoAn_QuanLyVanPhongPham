@@ -31,7 +31,6 @@
                 <div class="col-lg-3">
                     <div class="filter-sidebar">
                         <h5 class="filter-title">LỌC SẢN PHẨM</h5>
-
                         <%-- 
                           Kiểm tra xem đây là trang DANH MỤC hay trang TÌM KIẾM
                           để trỏ action của form cho đúng.
@@ -104,9 +103,9 @@
 
                     <div class="col-lg-9">
 
-                    <%-- Ẩn banner khi tìm kiếm --%>
-                    <c:if test="${not empty param.loaiId}">
-                        <img src="${pageContext.request.contextPath}/assets/image/banner/category_banner_butbi.jpg" class="img-fluid category-banner mb-4" alt="Banner ${tenDanhMuc}">
+                    <c:if test="${not empty bannerFile}">
+                        <img src="${pageContext.request.contextPath}/assets/image/banner/${bannerFile}"
+                             class="img-fluid category-banner mb-4" alt="Banner ${tenDanhMuc}">
                     </c:if>
 
                     <h1 class="category-title">${tenDanhMuc}</h1>

@@ -4,6 +4,42 @@
         <servlet-name>DanhGia</servlet-name>
         <servlet-class>controller.DanhGia</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DangNhap</servlet-name>
+        <servlet-class>controller.DangNhap</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DangKy</servlet-name>
+        <servlet-class>controller.DangKy</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DangXuat</servlet-name>
+        <servlet-class>controller.DangXuat</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GioHang</servlet-name>
+        <servlet-class>controller.GioHang</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>XemGioHang</servlet-name>
+        <servlet-class>controller.XemGioHang</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ChiTietGioHang</servlet-name>
+        <servlet-class>controller.ChiTietGioHang</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>XoaChiTietGioHang</servlet-name>
+        <servlet-class>controller.XoaChiTietGioHang</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ThanhToan</servlet-name>
+        <servlet-class>controller.ThanhToan</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>XoaGioHang</servlet-name>
+        <servlet-class>controller.XoaGioHang</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Search</servlet-name>
         <url-pattern>/Search</url-pattern>
@@ -11,6 +47,38 @@
     <servlet-mapping>
         <servlet-name>DanhGia</servlet-name>
         <url-pattern>/DanhGia</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DangNhap</servlet-name>
+        <url-pattern>/DangNhap</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DangKy</servlet-name>
+        <url-pattern>/DangKy</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DangXuat</servlet-name>
+        <url-pattern>/DangXuat</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>XemGioHang</servlet-name>
+        <url-pattern>/XemGioHang</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChiTietGioHang</servlet-name>
+        <url-pattern>/ChiTietGioHang</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>XoaChiTietGioHang</servlet-name>
+        <url-pattern>/XoaChiTietGioHang</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ThanhToan</servlet-name>
+        <url-pattern>/ThanhToan</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>XoaGioHang</servlet-name>
+        <url-pattern>/XoaGioHang</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>view/chitietsanpham.jsp</welcome-file>

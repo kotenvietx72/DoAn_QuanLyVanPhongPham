@@ -3,21 +3,59 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
     <div class="container-fluid">
+        <%-- Link về trang chủ (HomeServlet) --%>
         <a class="navbar-brand fw-bold" href="${pageContext.request.contextPath}/trang-chu">
-            <img src="${pageContext.request.contextPath}/assets/image/logo.png" alt="Logo"> 3 Anh Em
+            <img src="${pageContext.request.contextPath}/assets/image/logo.png" alt="Logo"> 3AE
         </a>
+
+        <%-- Form tìm kiếm (trỏ đến SearchServlet) --%>
         <form class="d-flex mx-auto w-50" action="tim-kiem" method="GET">
             <input class="form-control me-2" type="search" name="keyword" placeholder="Tìm kiếm sản phẩm...">
             <button class="btn btn-light" type="submit">
                 <i class="bi bi-search"></i>
             </button>
         </form>
+
         <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link text-white" href="dang-nhap">Đăng nhập</a></li>
-            <li class="nav-item"><a class="nav-link text-white" href="dang-ky">Đăng ký</a></li>
+            <c:if test="${sessionScope.authUser == null}">
+                <%-- CHƯA ĐĂNG NHẬP --%>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="${pageContext.request.contextPath}/view/dangnhap.jsp">Đăng nhập</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="${pageContext.request.contextPath}/view/dangky.jsp">Đăng ký</a>
+                </li>
+            </c:if>
+
+            <c:if test="${sessionScope.authUser != null}">
+                <%-- ĐÃ ĐĂNG NHẬP --%>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="navbarUserDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle"></i> Chào, ${sessionScope.authUser.hoTen}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUserDropdown">
+                        <li><a class="dropdown-item" href="trang-ca-nhan">Thông tin tài khoản</a></li>
+                        <li><a class="dropdown-item" href="don-hang">Đơn hàng của tôi</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dang-xuat">Đăng xuất</a></li>
+                    </ul>
+                </li>
+            </c:if>
+
             <li class="nav-item">
-                <a class="nav-link text-white" href="gio-hang">
-                    🛒 Giỏ hàng <span class="badge bg-danger">0</span>
+                <a class="nav-link text-white" href="xem-gio-hang">
+                    🛒 Giỏ hàng 
+                    <span class="badge bg-danger" id="cartCount">
+                        <%
+                            model.NguoiDung authUser = (model.NguoiDung) session.getAttribute("authUser");
+                            if (authUser != null) {
+                                dao.NguoiDungDAO dao = new dao.NguoiDungDAO();
+                                out.print(dao.getTongSanPham(authUser.getNguoiDungId()));
+                            } else {
+                                out.print(0);
+                            }
+                        %>
+                    </span>
                 </a>
             </li>
         </ul>
@@ -28,7 +66,6 @@
     <div class="container-fluid">
         <div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
             <ul class="navbar-nav">
-
                 <li class="nav-item">
                     <a class="nav-link" href="danh-muc?loaiId=1">
                         <i class="bi bi-pen-fill"></i> Bút - Viết
@@ -71,7 +108,6 @@
                         <i class="bi bi-calculator-fill"></i> Máy tính
                     </a>
                 </li>
-
             </ul>
         </div>
     </div>

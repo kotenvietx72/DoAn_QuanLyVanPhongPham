@@ -1,16 +1,12 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
 
     // --- VAT Invoice Checkbox ---
     const vatCheckbox = document.getElementById('vatCheckbox');
     const vatForm = document.getElementById('vatForm');
 
     if (vatCheckbox && vatForm) {
-        vatCheckbox.addEventListener('change', function() {
-            if (this.checked) {
-                vatForm.style.display = 'block';
-            } else {
-                vatForm.style.display = 'none';
-            }
+        vatCheckbox.addEventListener('change', function () {
+            vatForm.style.display = this.checked ? 'block' : 'none';
         });
     }
 
@@ -19,37 +15,61 @@ document.addEventListener('DOMContentLoaded', function() {
     const plusButtons = document.querySelectorAll('.btn-plus');
     const minusButtons = document.querySelectorAll('.btn-minus');
 
-    // Plus button click
+    // 🧩 Hàm cập nhật số lượng lên server
+    async function updateCartItemQuantity(itemId, newQuantity) {
+        try {
+            const res = await fetch('cap-nhat-so-luong', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `id=${itemId}&soLuong=${newQuantity}`
+            });
+            const text = await res.text();
+            console.log('Server response:', text);
+
+            // Nếu thành công thì reload để cập nhật tổng tiền
+            if (text.includes('success')) {
+                location.reload();
+            } else {
+                alert('Cập nhật số lượng thất bại!');
+            }
+        } catch (err) {
+            console.error('Lỗi khi gửi yêu cầu cập nhật:', err);
+        }
+    }
+
+    // Nút "+"
     plusButtons.forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             const itemId = this.dataset.itemid;
             const input = document.querySelector(`.qty-input[data-itemid="${itemId}"]`);
             if (input) {
                 let currentValue = parseInt(input.value);
                 if (isNaN(currentValue)) currentValue = 0;
-                input.value = currentValue + 1;
-                // !!! TODO: Add AJAX call here to update cart on the server !!!
-                // updateCartItemQuantity(itemId, input.value);
-                console.log(`Update item ${itemId} quantity to ${input.value}`);
+                const newValue = currentValue + 1;
+                input.value = newValue;
+
+                // Gửi lên server
+                updateCartItemQuantity(itemId, newValue);
             }
         });
     });
 
-    // Minus button click
+    // Nút "-"
     minusButtons.forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             const itemId = this.dataset.itemid;
             const input = document.querySelector(`.qty-input[data-itemid="${itemId}"]`);
             if (input) {
                 let currentValue = parseInt(input.value);
                 if (isNaN(currentValue) || currentValue <= 1) {
-                    input.value = 1; // Don't go below 1
-                } else {
-                    input.value = currentValue - 1;
+                    input.value = 1;
+                    return;
                 }
-                // !!! TODO: Add AJAX call here to update cart on the server !!!
-                // updateCartItemQuantity(itemId, input.value);
-                 console.log(`Update item ${itemId} quantity to ${input.value}`);
+                const newValue = currentValue - 1;
+                input.value = newValue;
+
+                // Gửi lên server
+                updateCartItemQuantity(itemId, newValue);
             }
         });
     });
@@ -57,31 +77,19 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- Remove Item Button ---
     const removeButtons = document.querySelectorAll('.btn-remove-item');
     removeButtons.forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             const itemId = this.dataset.itemid;
-             if (confirm('Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?')) {
-                 // !!! TODO: Add AJAX call or form submission here to remove item on the server !!!
-                 // removeItemFromCart(itemId);
-                 console.log(`Remove item ${itemId}`);
-                 // Optionally remove the item row from the DOM immediately
-                 this.closest('.cart-item').remove();
-                 // !!! TODO: Recalculate and update totals !!!
-             }
+            if (confirm('Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?')) {
+                fetch('xoa-chi-tiet-gio-hang', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `id=${itemId}`
+                }).then(res => res.text())
+                  .then(text => {
+                      if (text.includes('success')) location.reload();
+                      else alert('Xóa sản phẩm thất bại!');
+                  });
+            }
         });
     });
-
-
-    // --- TODO: Functions for AJAX calls (Example placeholders) ---
-    /*
-    function updateCartItemQuantity(itemId, newQuantity) {
-        // Use fetch() or XMLHttpRequest to send data to your CartServlet
-        // Update totals on success
-    }
-
-    function removeItemFromCart(itemId) {
-        // Use fetch() or XMLHttpRequest to send data to your CartServlet
-        // Update totals on success
-    }
-    */
-
 });

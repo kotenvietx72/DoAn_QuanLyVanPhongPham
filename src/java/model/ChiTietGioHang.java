@@ -5,6 +5,7 @@ public class ChiTietGioHang {
     private int gioHangId;
     private int sanPhamId;
     private int soLuong;
+    private SanPham sanPham;
 
     public ChiTietGioHang() {}
 
@@ -26,4 +27,7 @@ public class ChiTietGioHang {
 
     public int getSoLuong() { return soLuong; }
     public void setSoLuong(int soLuong) { this.soLuong = soLuong; }
+    
+    public SanPham getSanPham() { return sanPham; }
+    public void setSanPham(SanPham sanPham) { this.sanPham = sanPham; }
 }

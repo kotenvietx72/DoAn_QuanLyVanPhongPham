@@ -16,6 +16,11 @@ public class DanhGia extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
 
@@ -56,11 +61,5 @@ public class DanhGia extends HttpServlet {
             // Xử lý lỗi (ví dụ: gửi về trang lỗi)
             response.sendRedirect("chi-tiet-san-pham?productId=" + sanPhamIdStr + "&error=true");
         }
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
     }
 }

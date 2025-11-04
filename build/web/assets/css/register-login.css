@@ -1,0 +1,44 @@
+/*
+ * CSS tùy chỉnh cho trang Đăng nhập / Đăng ký
+ */
+
+body {
+    background-color: #f8f9fa; /* Màu nền xám nhạt */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.auth-container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.card {
+    border: none;
+    border-radius: 0.5rem;
+}
+
+.auth-title {
+    color: #005cb9; /* Màu xanh đậm giống logo/navbar */
+    font-weight: 700;
+}
+
+/* Tùy chỉnh nút bấm chính cho khớp màu */
+.btn-primary {
+    background-color: #007bff; /* Màu xanh dương chủ đạo */
+    border-color: #007bff;
+    padding: 0.75rem;
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+}

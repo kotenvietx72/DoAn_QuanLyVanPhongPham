@@ -83,7 +83,7 @@
 .product-review-summary {
     font-family: "Be Vietnam Pro", sans-serif !important; /* Dùng font đẹp */
     display: flex;
-    align-items: center;
+    align-items: baseline;
     flex-wrap: wrap; 
     gap: 12px;
     margin-bottom: 1.5rem; 
@@ -277,59 +277,103 @@
   color: #333;
 }
 
+/* Khung chứa sao */
 .rating-stars-input {
-    display: inline-block;
-    border: none;
+  display: inline-flex;
+  flex-direction: row-reverse; /* đảo thứ tự sao */
+  align-items: center;
+  gap: 4px;
 }
 
-/* Ẩn các radio button gốc */
+/* Ẩn radio button */
 .rating-stars-input > input {
-    display: none;
+  display: none;
 }
 
-/* Hiển thị các label (ngôi sao) */
+/* Style cho sao */
 .rating-stars-input > label {
-    color: #ddd; /* Màu sao mờ */
-    float: right; /* Đảo ngược thứ tự sao (quan trọng) */
-    font-size: 1.8rem;
-    padding: 0 2px;
-    cursor: pointer;
-    transition: color 0.2s ease;
+  font-family: 'bootstrap-icons';
+  font-size: 1.8rem;
+  color: #ddd;
+  cursor: pointer;
+  transition: color 0.2s ease;
 }
 
-/* Thêm icon ngôi sao bằng ::before */
+/* Dạng rỗng (chưa chọn) */
 .rating-stars-input > label::before {
-    content: '\F586'; /* Mã Unicode của icon bi-star */
-    font-family: 'bootstrap-icons';
+  content: '\F586'; /* bi-star */
 }
 
-/* Khi hover vào một sao, nó và các sao bên PHẢI nó sẽ sáng lên */
+/* Hover sao */
 .rating-stars-input > label:hover,
 .rating-stars-input > label:hover ~ label {
-    color: #ffc107; /* Màu vàng */
+  color: #ffc107;
 }
 .rating-stars-input > label:hover::before,
 .rating-stars-input > label:hover ~ label::before {
-    content: '\F586'; /* bi-star */
+  content: '\F586';
 }
 
-/* Khi chọn 1 sao (checked), nó và các sao bên PHẢI nó sẽ sáng */
+/* Khi đã chọn */
 .rating-stars-input > input:checked ~ label {
-    color: #ffc107;
+  color: #ffc107;
 }
 .rating-stars-input > input:checked ~ label::before {
-    content: '\F588'; /* Mã Unicode của icon bi-star-fill */
+  content: '\F588'; /* bi-star-fill */
 }
 
-/* CSS cho danh sách bình luận (nếu quá dài) */
+/* Giúp label và sao căn baseline cùng chữ label */
+.form-label {
+  display: inline-block;
+  margin-bottom: 0;
+  vertical-align: middle;
+}
+
 .reviews-list {
-    max-height: 500px;
-    overflow-y: auto;
-    padding-right: 10px;
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 8px;
 }
-.review-author strong {
-    font-weight: 600;
+
+.review-item {
+  font-family: "Be Vietnam Pro", sans-serif;
 }
-.review-content p {
-    color: #333;
+
+.review-item strong {
+  color: #212529;
+}
+
+.review-item .rating-stars i {
+  font-size: 1rem;
+}
+
+/* Khung form đánh giá */
+.review-form-wrapper {
+  border-top: 2px dashed #dee2e6;
+  padding-top: 20px;
+}
+
+/* Hiệu ứng hover nhẹ */
+.review-item:hover {
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  transition: background-color 0.2s ease;
+}
+
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap; /* giúp responsive trên mobile */
+  align-items: center;
+  gap: 12px;
+  margin-top: 1.5rem;
+}
+
+.action-buttons form {
+  flex: 1; /* mỗi form chiếm 50% chiều rộng */
+  margin: 0;
+}
+
+.action-buttons button {
+  width: 100%; /* nút chiếm toàn bộ form */
+  white-space: nowrap; /* tránh chữ bị xuống dòng */
 }

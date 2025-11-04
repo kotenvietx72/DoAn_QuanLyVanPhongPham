@@ -92,14 +92,17 @@
                         </div>
 
                         <div class="action-buttons mt-4 d-flex gap-3">
-                            <form action="them-vao-gio" method="POST" style="flex: 1;">
+                            <form id="formAddToCart" action="them-gio-hang" method="GET" style="flex: 1;">
+                                <input type="hidden" name="action" value="add">
                                 <input type="hidden" name="productId" value="${sanPham.sanPhamId}">
                                 <input type="hidden" name="quantity" id="formQtyAdd" value="1">
                                 <button type="submit" class="btn btn-add-to-cart w-100">
                                     <i class="bi bi-cart-plus-fill"></i> Thêm vào giỏ
                                 </button>
                             </form>
-                            <form action="mua-ngay" method="POST" style="flex: 1;">
+
+                            <form action="thanh-toan" method="POST" style="flex: 1;">
+                                <input type="hidden" name="action" value="buyNow">
                                 <input type="hidden" name="productId" value="${sanPham.sanPhamId}">
                                 <input type="hidden" name="quantity" id="formQtyBuy" value="1">
                                 <button type="submit" class="btn btn-buy-now w-100">
@@ -113,6 +116,7 @@
                 <div class="row mt-5">
                     <div class="col-12">
                         <div class="product-tabs">
+                            <!-- Tabs -->
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab" aria-controls="description" aria-selected="true">
@@ -125,85 +129,94 @@
                                     </button>
                                 </li>
                             </ul>
+
+                            <!-- Nội dung từng tab -->
                             <div class="tab-content" id="myTabContent">
+                                <!-- TAB MÔ TẢ -->
                                 <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
                                     <div class="tab-pane-content">
                                         <p>${sanPham.moTa}</p>
                                     </div>
                                 </div>
+
+                                <!-- TAB ĐÁNH GIÁ -->
                                 <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
                                     <div class="tab-pane-content">
-                                        <c:if test="${empty sanPham.listDanhGia}">
-                                            <p class="text-center">Chưa có đánh giá nào cho sản phẩm này.</p>
-                                        </c:if>
-                                        <c:if test="${not empty sanPham.listDanhGia}">
-                                            <c:forEach var="dg" items="${sanPham.listDanhGia}">
-                                                <div class="review-item mb-3 pb-3 border-bottom">
-                                                    <div class="review-author">
-                                                        <strong>
-                                                            <%-- (Bạn cần sửa Model DanhGiaSanPham để thêm tenKhachHang) --%>
-                                                            Khách hàng #${dg.khachHangId}
-                                                        </strong>
-                                                    </div>
-                                                    <div class="review-stars rating-stars my-1">
-                                                        <c:forEach begin="1" end="5" var="i">
-                                                            <i class="bi ${i <= dg.diem ? 'bi-star-fill' : 'bi-star'}"></i>
-                                                        </c:forEach>
-                                                    </div>
-                                                    <div class="review-content">
-                                                        <p class="mb-1">${dg.noiDung}</p>
-                                                        <small class="text-muted">
-                                                            <fmt:formatDate value="${dg.ngayDanhGia}" pattern="dd-MM-yyyy HH:mm"/>
-                                                        </small>
-                                                    </div>
+
+                                        <!-- DANH SÁCH ĐÁNH GIÁ -->
+                                        <c:choose>
+                                            <c:when test="${empty sanPham.listDanhGia}">
+                                                <p class="text-center text-muted">Chưa có đánh giá nào cho sản phẩm này.</p>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <div class="reviews-list mb-4">
+                                                    <c:forEach var="dg" items="${sanPham.listDanhGia}">
+                                                        <div class="review-item border-bottom pb-3 mb-3">
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                <strong>Khách hàng #${dg.khachHangId}</strong>
+                                                                <small class="text-muted">
+                                                                    <fmt:formatDate value="${dg.ngayDanhGia}" pattern="dd-MM-yyyy HH:mm"/>
+                                                                </small>
+                                                            </div>
+                                                            <div class="rating-stars my-1">
+                                                                <c:forEach begin="1" end="5" var="i">
+                                                                    <i class="bi ${i <= dg.diem ? 'bi-star-fill text-warning' : 'bi-star text-secondary'}"></i>
+                                                                </c:forEach>
+                                                            </div>
+                                                            <p class="mb-0">${dg.noiDung}</p>
+                                                        </div>
+                                                    </c:forEach>
                                                 </div>
-                                            </c:forEach>
-                                        </c:if>
+                                            </c:otherwise>
+                                        </c:choose>
+
+                                        <!-- FORM GỬI ĐÁNH GIÁ -->
+                                        <div class="review-form-wrapper mt-4">
+                                            <h5 class="mb-3">Gửi đánh giá của bạn</h5>
+
+                                            <c:if test="${empty authUser}">
+                                                <div class="alert alert-warning" role="alert">
+                                                    Vui lòng <a href="dang-nhap?redirect=chi-tiet-san-pham?productId=${sanPham.sanPhamId}" class="alert-link">đăng nhập</a> để gửi đánh giá.
+                                                </div>
+                                            </c:if>
+
+                                            <c:if test="${not empty authUser}">
+                                                <form action="danh-gia" method="POST" class="p-3 border rounded bg-light">
+                                                    <input type="hidden" name="productId" value="${sanPham.sanPhamId}">
+
+                                                    <!-- Dòng sao -->
+                                                    <div class="mb-3 d-flex align-items-center gap-2">
+                                                        <label class="form-label mb-0">Đánh giá của bạn:</label>
+                                                        <div class="rating-stars-input">
+                                                            <input type="radio" id="star5" name="rating" value="5" required>
+                                                            <label for="star5" title="5 sao"></label>
+
+                                                            <input type="radio" id="star4" name="rating" value="4">
+                                                            <label for="star4" title="4 sao"></label>
+
+                                                            <input type="radio" id="star3" name="rating" value="3">
+                                                            <label for="star3" title="3 sao"></label>
+
+                                                            <input type="radio" id="star2" name="rating" value="2">
+                                                            <label for="star2" title="2 sao"></label>
+
+                                                            <input type="radio" id="star1" name="rating" value="1">
+                                                            <label for="star1" title="1 sao"></label>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Nhận xét -->
+                                                    <div class="mb-3">
+                                                        <label for="comment" class="form-label">Nhận xét (tùy chọn):</label>
+                                                        <textarea class="form-control" id="comment" name="comment" rows="4" placeholder="Sản phẩm dùng rất tốt..."></textarea>
+                                                    </div>
+
+                                                    <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+                                                </form>
+                                            </c:if>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-5">
-                                <h5 class="mb-3 mt-4">Gửi đánh giá của bạn</h5>
-
-                                <%-- 
-                                  Servlet (ChiTietSanPham.java) phải gửi biến "authUser" sang.
-                                  Nếu ${authUser} rỗng (empty), hiển thị thông báo đăng nhập.
-                                --%>
-                                <c:if test="${empty authUser}">
-                                    <div class="alert alert-warning" role="alert">
-                                        Vui lòng <a href="dang-nhap?redirect=chi-tiet-san-pham?productId=${sanPham.sanPhamId}" class="alert-link">đăng nhập</a> để gửi đánh giá.
-                                    </div>
-                                </c:if>
-
-                                <%-- 
-                                  Chỉ hiển thị Form nếu ${authUser} KHÔNG rỗng (đã đăng nhập).
-                                --%>
-                                <c:if test="${not empty authUser}">
-                                    <%-- Form này sẽ gửi dữ liệu đến "ThemDanhGiaServlet" --%>
-                                    <form action="danh-gia" method="POST">
-
-                                        <%-- Gửi ID sản phẩm đi (ẩn) --%>
-                                        <input type="hidden" name="productId" value="${sanPham.sanPhamId}">
-
-                                        <div class="mb-3">
-                                            <label class="form-label">Đánh giá của bạn:</label>
-                                            <div class="rating-stars-input">
-                                                <input type="radio" id="star5" name="rating" value="5" required/><label for="star5" title="5 sao"></label>
-                                                <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 sao"></label>
-                                                <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 sao"></label>
-                                                <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 sao"></label>
-                                                <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 sao"></label>
-                                            </div>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="comment" class="form-label">Nhận xét (tùy chọn):</label>
-                                            <textarea class="form-control" id="comment" name="comment" rows="4" placeholder="Sản phẩm dùng rất tốt..."></textarea>
-                                        </div>
-
-                                        <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
-                                    </form>
-                                </c:if>
                             </div>
                         </div>
                     </div>
@@ -217,6 +230,7 @@
         </div>
 
         <jsp:include page="_footer.jsp" />          
+        
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
         <script src="${pageContext.request.contextPath}/assets/js/product-detail.js"></script>
     </body>
