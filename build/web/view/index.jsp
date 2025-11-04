@@ -1,6 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@taglib uri="jakarta.tags.core" prefix="c" %>
+<%@taglib uri="jakarta.tags.fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -28,8 +28,31 @@
                 </form>
 
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link text-white" href="dang-nhap">Đăng nhập</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="dang-ky">Đăng ký</a></li>
+                    <c:if test="${sessionScope.acc == null}">
+                        <%-- CHƯA ĐĂNG NHẬP --%>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="${pageContext.request.contextPath}/view/dangnhap.jsp">Đăng nhập</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="${pageContext.request.contextPath}/view/dangky.jsp">Đăng ký</a>
+                        </li>
+                    </c:if>
+
+                    <c:if test="${sessionScope.acc != null}">
+                        <%-- ĐÃ ĐĂNG NHẬP --%>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white" href="#" id="navbarUserDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle"></i> Chào, ${sessionScope.acc.hoTen}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUserDropdown">
+                                <li><a class="dropdown-item" href="trang-ca-nhan">Thông tin tài khoản</a></li>
+                                <li><a class="dropdown-item" href="don-hang">Đơn hàng của tôi</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dang-xuat">Đăng xuất</a></li>
+                            </ul>
+                        </li>
+                    </c:if>
+
                     <li class="nav-item">
                         <a class="nav-link text-white" href="gio-hang">
                             🛒 Giỏ hàng <span class="badge bg-danger">0</span> <%-- Cần cập nhật số lượng động --%>
@@ -237,7 +260,7 @@
                 </div>
             </div>
         </footer>
-                        
+
         <div class="copyright-bar">
             <div class="container text-center p-3">
                 © 2025 Copyright:

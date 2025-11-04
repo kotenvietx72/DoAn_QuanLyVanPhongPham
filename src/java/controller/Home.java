@@ -11,7 +11,7 @@ import model.SanPham;
 import dao.*;
 import jakarta.servlet.annotation.WebServlet;
 
-@WebServlet(name = "HomeServlet")
+@WebServlet(urlPatterns = {"/Home"})
 public class Home extends HttpServlet {
 
     @Override
