@@ -85,7 +85,7 @@
 
                                         <!-- NƠI HIỂN THỊ MÃ QR (JS của bạn sẽ gắn vào đây) -->
                                         <div id="qrcodeCanvas" class="mx-auto" style="width:400px; height:auto;"></div>
-                                        
+
                                         <span id="qrAmount" style="display:none;"></span>
                                         <span id="qrContent" style="display:none;"></span>
 
@@ -140,8 +140,10 @@
                                 <span>Phí vận chuyển</span>
                                 <span>
                                     <c:choose>
-                                        <c:when test="${shippingCost > 0}"><fmt:formatNumber value="${shippingCost}" type="currency" currencySymbol="" minFractionDigits="0"/>₫</c:when>
-                                        <c:otherwise>—</c:otherwise>
+                                        <c:when test="${shippingCost > 0}">
+                                            <fmt:formatNumber value="${shippingCost}" type="currency" currencySymbol="" minFractionDigits="0"/>₫
+                                        </c:when>
+                                        <c:otherwise>Miễn phí</c:otherwise>
                                     </c:choose>
                                 </span>
                             </div>

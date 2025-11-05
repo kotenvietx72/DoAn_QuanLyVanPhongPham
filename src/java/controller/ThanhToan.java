@@ -33,7 +33,6 @@ public class ThanhToan extends HttpServlet {
             int productId = Integer.parseInt(request.getParameter("productId"));
             int quantity = Integer.parseInt(request.getParameter("quantity"));
 
-            // Lấy thông tin sản phẩm trực tiếp từ DB
             SanPhamDAO spDao = new SanPhamDAO();
             SanPham sp = spDao.getSanPhamById(productId);
 
@@ -42,16 +41,29 @@ public class ThanhToan extends HttpServlet {
                 return;
             }
 
-            // Tạo 1 đối tượng ChiTietGioHang tạm để truyền sang JSP
+            // ✅ Chọn giá khuyến mãi nếu có
+            double donGia = (sp.getGiaKhuyenMai() > 0) ? sp.getGiaKhuyenMai() : sp.getGiaBan();
+            double subtotal = donGia * quantity;
+
+            // ✅ Logic phí ship thống nhất với giỏ hàng
+            double shippingCost;
+            if (subtotal < 50000) {
+                shippingCost = 30000;
+            } else if (subtotal < 100000) {
+                shippingCost = 20000;
+            } else if (subtotal < 200000) {
+                shippingCost = 10000;
+            } else {
+                shippingCost = 0;
+            }
+
+            double grandTotal = subtotal + shippingCost;
+
             ChiTietGioHang temp = new ChiTietGioHang();
             temp.setSanPham(sp);
             temp.setSoLuong(quantity);
 
-            double subtotal = sp.getGiaBan() * quantity;
-            double shippingCost = subtotal < 100000 ? 20000 : 0;
-            double grandTotal = subtotal + shippingCost;
-
-            // Gửi sang JSP
+            // ✅ Truyền đầy đủ qua JSP
             request.setAttribute("cartItems", java.util.Arrays.asList(temp));
             request.setAttribute("subtotal", subtotal);
             request.setAttribute("shippingCost", shippingCost);

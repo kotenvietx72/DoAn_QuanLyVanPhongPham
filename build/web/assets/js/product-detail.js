@@ -1,120 +1,100 @@
-/* ======================================= */
-/* JS TRANG CHI TIẾT SẢN PHẨM
- /* ======================================= */
-/* global bootstrap */
-
 document.addEventListener("DOMContentLoaded", function () {
 
     const btnPlus = document.getElementById("btnQtyPlus");
     const btnMinus = document.getElementById("btnQtyMinus");
     const qtyInput = document.getElementById("qtyInput");
 
-    // (Lấy input ẩn để cập nhật số lượng cho form)
     const formQtyAdd = document.getElementById("formQtyAdd");
     const formQtyBuy = document.getElementById("formQtyBuy");
 
+    // Cập nhật giá trị quantity
     function updateFormQuantities(newValue) {
-        if (formQtyAdd)
-            formQtyAdd.value = newValue;
-        if (formQtyBuy)
-            formQtyBuy.value = newValue;
+        if (formQtyAdd) formQtyAdd.value = newValue;
+        if (formQtyBuy) formQtyBuy.value = newValue;
     }
 
-    // Nút Tăng (+)
     if (btnPlus) {
         btnPlus.addEventListener("click", function () {
-            let currentValue = parseInt(qtyInput.value);
-            if (isNaN(currentValue)) {
-                currentValue = 0;
-            }
-            let newValue = currentValue + 1;
-            qtyInput.value = newValue;
-            updateFormQuantities(newValue); // Cập nhật form
+            let val = parseInt(qtyInput.value) || 1;
+            qtyInput.value = val + 1;
+            updateFormQuantities(val + 1);
         });
     }
 
-    // Nút Giảm (-)
     if (btnMinus) {
         btnMinus.addEventListener("click", function () {
-            let currentValue = parseInt(qtyInput.value);
-            let newValue;
-            if (isNaN(currentValue) || currentValue <= 1) {
-                newValue = 1; // Không cho giảm dưới 1
-            } else {
-                newValue = currentValue - 1;
-            }
-            qtyInput.value = newValue;
-            updateFormQuantities(newValue); // Cập nhật form
+            let val = parseInt(qtyInput.value) || 1;
+            qtyInput.value = val > 1 ? val - 1 : 1;
+            updateFormQuantities(qtyInput.value);
         });
     }
 
-    // --- 3. HIỆU ỨNG CHỌN PHÂN LOẠI ---
-    const optionButtons = document.querySelectorAll(".btn-option");
-
-    optionButtons.forEach((button, index) => {
-        button.addEventListener("click", function (event) {
-            event.preventDefault();
-            optionButtons.forEach(btn => {
-                btn.classList.remove("active");
-            });
-            this.classList.add("active");
-        });
-    });
-
-    const scrollToReviewsLink = document.getElementById("scrollToReviews");
-    const reviewsTabButton = document.getElementById("reviews-tab"); // Nút bấm tab
-
-    if (scrollToReviewsLink && reviewsTabButton) {
-
-        // Tạo đối tượng Tab của Bootstrap
-        const reviewTab = new bootstrap.Tab(reviewsTabButton);
-
-        scrollToReviewsLink.addEventListener("click", function (event) {
-            event.preventDefault(); // Ngăn hành vi nhảy (anchor link)
-
-            // 1. Dùng JS để kích hoạt (chuyển) sang tab Đánh giá
-            reviewTab.show();
-
-            // 2. (Tùy chọn) Cuộn trang xuống khu vực tab cho mượt
-            const tabElement = document.getElementById("myTab"); // Lấy thanh nav-tabs
-            if (tabElement) {
-                tabElement.scrollIntoView({behavior: 'smooth', block: 'start'});
-            }
-        });
-    }
-
-    window.addEventListener("load", function () {
-        const addToCartForm = document.getElementById("formAddToCart");
-        if (!addToCartForm)
-            return;
-
+    // Xử lý form Thêm vào giỏ hàng
+    const addToCartForm = document.getElementById("formAddToCart");
+    if (addToCartForm) {
         addToCartForm.addEventListener("submit", function (e) {
-            e.preventDefault(); // Ngăn reload
+            e.preventDefault(); // Ngăn load lại trang
 
             const formData = new FormData(addToCartForm);
-            const url = addToCartForm.action + '?' + new URLSearchParams(formData).toString();
+            const query = new URLSearchParams(formData).toString();
+            const url = addToCartForm.action + "?" + query;
 
-            fetch(url, {method: 'GET'})
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.success) {
-                            const cartBadge = document.querySelector("#cartCount");
-                            if (cartBadge) {
-                                cartBadge.textContent = data.cartCount;
-                                cartBadge.classList.add("cart-bump");
-                                setTimeout(() => cartBadge.classList.remove("cart-bump"), 300);
-                            }
-                            showToast("Đã thêm sản phẩm vào giỏ hàng!", "success");
-                        } else if (data.requireLogin) {
-                            showToast("Vui lòng đăng nhập để thêm sản phẩm!", "warning");
-                            setTimeout(() => (window.location.href = "dang-nhap"), 1500);
-                        } else {
-                            showToast("Thêm sản phẩm thất bại!", "danger");
+            fetch(url, { method: "GET" })
+                .then(res => {
+                    if (!res.ok) throw new Error("HTTP " + res.status);
+                    return res.json();
+                })
+                .then(data => {
+                    // Nếu chưa đăng nhập
+                    if (data.requireLogin) {
+                        showToast("Vui lòng đăng nhập để thêm sản phẩm!", "warning");
+                        setTimeout(() => window.location.href = "dang-nhap", 1200);
+                        return;
+                    }
+
+                    // Nếu thêm thành công
+                    if (data.success) {
+                        const cartBadge = document.getElementById("cartCount");
+                        if (cartBadge) {
+                            cartBadge.textContent = data.cartCount;
+                            cartBadge.classList.add("cart-bump");
+                            setTimeout(() => cartBadge.classList.remove("cart-bump"), 300);
                         }
-                    })
-                    .catch(() => {
-                        showToast("Lỗi hệ thống!", "danger");
-                    });
+                        showToast("Đã thêm sản phẩm vào giỏ hàng!", "success");
+                    } else {
+                        showToast("Không thể thêm sản phẩm!", "danger");
+                    }
+                })
+                .catch(err => {
+                    console.error("Fetch error:", err);
+                    showToast("Lỗi hệ thống!", "danger");
+                });
         });
-    });
+    }
+
+    // Hàm hiển thị toast nhỏ gọn
+    function showToast(msg, type) {
+        const colors = {
+            success: "#28a745",
+            warning: "#ffc107",
+            danger: "#dc3545"
+        };
+        const toast = document.createElement("div");
+        toast.textContent = msg;
+        toast.style.position = "fixed";
+        toast.style.bottom = "20px";
+        toast.style.right = "20px";
+        toast.style.background = colors[type] || "#28a745";
+        toast.style.color = "#fff";
+        toast.style.padding = "10px 18px";
+        toast.style.borderRadius = "8px";
+        toast.style.boxShadow = "0 2px 8px rgba(0,0,0,0.2)";
+        toast.style.opacity = "0";
+        toast.style.transition = "opacity .3s";
+        toast.style.zIndex = "9999";
+        document.body.appendChild(toast);
+        setTimeout(() => toast.style.opacity = "1", 50);
+        setTimeout(() => toast.style.opacity = "0", 2000);
+        setTimeout(() => toast.remove(), 2500);
+    }
 });

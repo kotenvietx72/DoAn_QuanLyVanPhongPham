@@ -92,8 +92,10 @@
                         </div>
 
                         <div class="action-buttons mt-4 d-flex gap-3">
-                            <form id="formAddToCart" action="them-gio-hang" method="GET" style="flex: 1;">
-                                <input type="hidden" name="action" value="add">
+                            <form id="formAddToCart" 
+                                  action="${pageContext.request.contextPath}/them-gio-hang" 
+                                  method="GET" 
+                                  style="flex: 1;">
                                 <input type="hidden" name="productId" value="${sanPham.sanPhamId}">
                                 <input type="hidden" name="quantity" id="formQtyAdd" value="1">
                                 <button type="submit" class="btn btn-add-to-cart w-100">
@@ -230,7 +232,7 @@
         </div>
 
         <jsp:include page="_footer.jsp" />          
-        
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
         <script src="${pageContext.request.contextPath}/assets/js/product-detail.js"></script>
     </body>
