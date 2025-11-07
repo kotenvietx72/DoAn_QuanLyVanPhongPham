@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Đăng nhập - Văn Phòng Phẩm 3AE</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link href="assets/css/auth-style.css" rel="stylesheet">
+        <link href="<%= request.getContextPath() %>/assets/css/register-login.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
 
@@ -45,7 +45,7 @@
                                             Nhớ tôi
                                         </label>
                                     </div>
-                                    <a href="#" class="small text-decoration-none">Quên mật khẩu?</a>
+                                    <a href="#" class="small text-decoration-none" onclick="alert('Hãy liên hệ admin: 0123456789 để lấy lại mật khẩu'); return false;">Quên mật khẩu?</a>
                                 </div>
                                 <div class="d-grid">
                                     <button type="submit" class="btn btn-primary btn-block">Đăng Nhập</button>
