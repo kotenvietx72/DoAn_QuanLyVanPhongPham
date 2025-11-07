@@ -13,6 +13,7 @@
         <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     </head>
     <body>
+        <input type="hidden" id="isBuyNow" value="${isBuyNow ? 'true' : 'false'}">
         <div class="container checkout-container my-5">
             <nav aria-label="breadcrumb" class="mb-4">
                 <ol class="breadcrumb">
@@ -25,7 +26,7 @@
                 <div class="col-lg-7">
                     <div class="shipping-info-wrapper">
                         <h4 class="section-title">Thông tin giao hàng</h4>
-                        <form onsubmit="return false;">
+                        <form>
                             <div class="row g-3 mb-3">
                                 <div class="col-md-6">
                                     <input type="text" class="form-control" placeholder="Họ và tên" required>
@@ -62,9 +63,7 @@
                                     <i class="bi bi-chevron-left"></i> Giỏ hàng
                                 </a>
                                 <button type="button" 
-                                        class="btn btn-primary btn-lg btn-continue"
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#qrPaymentModal">
+                                        class="btn btn-primary btn-lg btn-continue">
                                     Tiếp tục đến phương thức thanh toán
                                 </button>
                             </div>
@@ -125,7 +124,7 @@
                                     <h6 class="summary-item-title">${item.sanPham.tenSanPham}</h6>
                                 </div>
                                 <div class="summary-item-price fw-bold">
-                                    <fmt:formatNumber value="${item.sanPham.giaBan * item.soLuong}" type="number" groupingUsed="true"/>₫
+                                    <fmt:formatNumber value="${item.sanPham.giaKhuyenMai * item.soLuong}" type="number" groupingUsed="true"/>₫
                                 </div>
                             </div>
                         </c:forEach>

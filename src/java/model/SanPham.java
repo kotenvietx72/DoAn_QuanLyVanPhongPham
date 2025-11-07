@@ -1,7 +1,6 @@
 package model;
 import dao.DanhGiaDAO;
 import java.util.List;
-import model.DanhGiaSanPham;
 
 public class SanPham {
     private int sanPhamId;
@@ -61,28 +60,26 @@ public class SanPham {
     public void setTrangThai(String trangThai) { this.trangThai = trangThai; }
     
     public double getGiaKhuyenMai() {
-        double phanTramGiam = 0.35;
-        
-        // 1. Tính giá sau khi giảm
+        double phanTramGiam = 0.35;  // 35% mặc định
+
         double giaSaleMoi = giaBan * (1.0 - phanTramGiam);
-        
-        // 2. Đặt mức giá an toàn (ví dụ: luôn lời ít nhất 10% so với giá nhập)
-        double giaSanAnToan = giaNhap * 1.10; 
-        
-        // 3. So sánh
-        double giaCuoiCung;
-        if (giaSaleMoi < giaSanAnToan) {
-            // Nếu giảm 20% bị lỗ (hoặc lãi quá ít) -> bán bằng giá sàn
-            giaCuoiCung = giaSanAnToan;
-        } else {
-            // Nếu giá sale vẫn ổn -> bán giá sale
-            giaCuoiCung = giaSaleMoi;
-        }
-        
-        // 4. Làm tròn tiền (ví dụ: làm tròn đến 100đ)
+        double giaSanAnToan = giaNhap * 1.10;  // luôn lời ít nhất 10%
+
+        double giaCuoiCung = (giaSaleMoi < giaSanAnToan) ? giaSanAnToan: giaSaleMoi;
+
         return Math.round(giaCuoiCung / 100.0) * 100;
     }
-    
+
+    // ✅ PHẦN TRĂM GIẢM dạng số (vd: 35.0)
+    public double getPhanTramGiam() {
+        return ((giaBan - getGiaKhuyenMai()) / giaBan) * 100.0;
+    }
+
+    // ✅ PHẦN TRĂM GIẢM dạng decimal (vd: 0.35)
+    public double getPhanTramDecimal() {
+        return getPhanTramGiam() / 100.0;
+    }
+
     public List<DanhGiaSanPham> getListDanhGia() {
         DanhGiaDAO dao = new DanhGiaDAO();
         return dao.getBySanPhamId(this.sanPhamId); 

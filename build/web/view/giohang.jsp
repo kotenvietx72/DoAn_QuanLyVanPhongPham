@@ -45,7 +45,7 @@
                                 <!-- Giá -->
                                 <div class="col-2 text-end">
                                     <span class="cart-item-price text-primary fw-semibold">
-                                        <fmt:formatNumber value="${item.sanPham.giaBan}" type="number" groupingUsed="true"/>₫
+                                        <fmt:formatNumber value="${item.sanPham.giaKhuyenMai}" type="number" groupingUsed="true"/>₫
                                     </span>
                                 </div>
 

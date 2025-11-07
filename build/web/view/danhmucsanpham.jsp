@@ -18,7 +18,7 @@
     </head>
     <body>
         <jsp:include page="_header.jsp" />
-        
+
         <div class="container category-container my-4">
             <nav aria-label="breadcrumb" class="mb-4">
                 <ol class="breadcrumb">
@@ -163,12 +163,16 @@
                                                 <span class="rating-count">(${tongDG})</span>
                                             </div>
                                             <div class="price-block-special mt-2">
-                                                <span class="sale-price"><fmt:formatNumber value="${giaMoi}" type="currency" currencySymbol="" minFractionDigits="0"/>₫</span>
-                                                <c:set var="phanTram" value="${(giaCu - giaMoi) * 100 / giaCu}" />
-                                                <span class="discount-badge">-<fmt:formatNumber value="${phanTram / 100}" type="percent" minIntegerDigits="0"/></span>
+                                                <span class="sale-price">
+                                                    <fmt:formatNumber value="${sp.giaKhuyenMai}" type="number" groupingUsed="true" minFractionDigits="0"/>₫
+                                                </span>
+
+                                                <span class="discount-badge">
+                                                    -<fmt:formatNumber value="${sp.phanTramDecimal}" type="percent" minFractionDigits="0"/>
+                                                </span>
                                             </div>
                                             <div class="old-price-block">
-                                                <span class="old-price"><fmt:formatNumber value="${giaCu}" type="currency" currencySymbol="" minFractionDigits="0"/>₫</span>
+                                                <span class="old-price"><fmt:formatNumber value="${sp.giaBan}" type="currency" currencySymbol="" minFractionDigits="0"/>₫</span>
                                             </div>
                                         </div>
                                         <div class="card-footer">

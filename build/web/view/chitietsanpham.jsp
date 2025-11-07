@@ -63,7 +63,6 @@
                             </span>
                             <span class="rating-score"><fmt:formatNumber value="${diemTrungBinh}" maxFractionDigits="1"/></span>
 
-                            <%-- THÊM id="scrollToReviews" VÀO LINK NÀY --%>
                             <a href="#reviews-tab" class="rating-count" id="scrollToReviews">(Xem ${tongDanhGia} đánh giá)</a>
 
                             <span class="divider">|</span>

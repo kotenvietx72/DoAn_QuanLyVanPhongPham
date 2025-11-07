@@ -10,7 +10,7 @@ import dao.*;
 import jakarta.servlet.annotation.WebServlet;
 import java.util.List;
 
-@WebServlet("/trang-chu") 
+@WebServlet("/trang-chu")
 public class Home extends HttpServlet {
 
     @Override
@@ -21,17 +21,17 @@ public class Home extends HttpServlet {
 
         try {
             SanPhamDAO sanPhamDAO = new SanPhamDAO();
-            
+
             List<SanPham> listFlashSale = sanPhamDAO.getSanPhamFlashSale(5);
             List<SanPham> listSpecialProducts = sanPhamDAO.getSanPhamDacBiet(20);
-            
+
             // Gửi dữ liệu sang JSP (Chỉ 2 danh sách)
             request.setAttribute("listFlashSale", listFlashSale);
             request.setAttribute("listSpecialProducts", listSpecialProducts);
 
             request.getRequestDispatcher("view/index.jsp").forward(request, response);
 
-        } catch (ServletException | IOException e) { 
+        } catch (ServletException | IOException e) {
             throw new ServletException("Lỗi khi xử lý trang chủ", e);
         }
     }
@@ -41,7 +41,7 @@ public class Home extends HttpServlet {
             throws ServletException, IOException {
         doGet(request, response);
     }
-    
+
     @Override
     public String getServletInfo() {
         return "Servlet xử lí hiển thị trang chủ";
