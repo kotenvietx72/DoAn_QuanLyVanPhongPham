@@ -34,8 +34,9 @@
                         <i class="bi bi-person-circle"></i> Chào, ${sessionScope.authUser.hoTen}
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUserDropdown">
-                        <li><a class="dropdown-item" href="trang-ca-nhan">Thông tin tài khoản</a></li>
-                        <li><a class="dropdown-item" href="don-hang">Đơn hàng của tôi</a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/thong-tin-ca-nhan">Thông tin tài khoản</a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/don-hang">Đơn hàng của tôi</a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/doi-mat-khau">Đổi mật khẩu</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dang-xuat">Đăng xuất</a></li>
                     </ul>
