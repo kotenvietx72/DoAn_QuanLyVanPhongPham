@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const qrCanvas = document.getElementById('qrcodeCanvas');
     const qrAmountSpan = document.getElementById('qrAmount');
     const qrContentSpan = document.getElementById('qrContent');
-    const btnPaid = document.querySelector('.btn-success'); // Nút “Tôi đã thanh toán”
+    const btnPaid = qrModalElement ? qrModalElement.querySelector('.btn-success') : null;
 
     // Tạo đối tượng Modal của Bootstrap
     const qrModal = qrModalElement ? new bootstrap.Modal(qrModalElement) : null;
@@ -69,26 +69,30 @@ document.addEventListener('DOMContentLoaded', function () {
             `;
         });
 
-
+        
         if (btnPaid) {
             btnPaid.addEventListener('click', function () {
+                // ✅ Lấy giá trị từ JSP để biết đây có phải BUY NOW không
+                const isBuyNow = document.getElementById('isBuyNow')?.value === "true";
+                // ✅ Nếu KHÔNG phải Buy Now → mới xoá giỏ hàng thật
+                if (!isBuyNow) {
+                    fetch('xoa-gio-hang', {method: 'POST', credentials: 'include'})
+                            .then(res => res.text())
+                            .then(text => console.log('Kết quả xóa giỏ hàng:', text))
+                            .catch(err => console.error('Lỗi khi xóa giỏ hàng:', err));
+                }
+
                 const modalBody = qrModalElement.querySelector('.modal-body');
 
                 // Xóa nội dung cũ (ẩn QR)
                 modalBody.innerHTML = `
-        <div class="text-center py-5">
-            <div class="alert alert-success d-inline-block" role="alert">
-                <i class="bi bi-check-circle-fill"></i>
-                <span class="ms-2">Thanh toán thành công! Cảm ơn bạn ❤️</span>
-            </div>
-        </div>
-    `;
+                <div class="text-center py-5">
+                    <div class="alert alert-success d-inline-block" role="alert">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span class="ms-2">Thanh toán thành công! Cảm ơn bạn ❤️</span>
+                    </div>
+                </div>`;
 
-                // Gọi servlet xóa giỏ hàng
-                fetch('xoa-gio-hang', {method: 'POST'})
-                        .then(res => res.text())
-                        .then(text => console.log('Kết quả xóa giỏ hàng:', text))
-                        .catch(err => console.error('Lỗi khi xóa giỏ hàng:', err));
 
                 // Đợi 2 giây cho người dùng thấy thông báo
                 setTimeout(() => {

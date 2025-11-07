@@ -23,6 +23,11 @@ public class XoaGioHang extends HttpServlet {
             response.getWriter().write("fail");
             return;
         }
+        
+        if (Boolean.TRUE.equals(session.getAttribute("BUY_NOW_ACTIVE"))) {
+            response.getWriter().write("ignored-buynow");
+            return;
+        }
 
         int userId = user.getNguoiDungId();
         var gioHang = gioHangDAO.getByKhachHangId(userId);

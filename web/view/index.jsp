@@ -59,7 +59,7 @@
 
                         <div class="col">
                             <div class="card h-100 flash-sale-card">
-                                <a href="chi-tiet-san-pham?id=${sp.sanPhamId}">
+                                <a href="chi-tiet-san-pham?productId=${sp.sanPhamId}">
                                     <img src="${pageContext.request.contextPath}${sp.hinhAnh}" class="card-img-top" alt="${sp.tenSanPham}">
                                 </a>
                                 <div class="card-body">
@@ -69,13 +69,16 @@
                                         </a>
                                     </h6>
                                     <div class="price-block mt-2">
-                                        <span class="sale-price"><fmt:formatNumber value="${giaMoi}" type="currency" currencySymbol="" minFractionDigits="0"/>₫</span>
-                                        <c:set var="phanTram" value="${(giaCu - giaMoi) * 100 / giaCu}" />
-                                        <span class="discount-badge">-<fmt:formatNumber value="${phanTram / 100}" type="percent" minIntegerDigits="0"/></span>
+                                        <span class="sale-price">
+                                            <fmt:formatNumber value="${sp.giaKhuyenMai}" type="number" groupingUsed="true" minFractionDigits="0"/>₫
+                                        </span>
+                                        <span class="discount-badge">
+                                            -<fmt:formatNumber value="${sp.phanTramDecimal}" type="percent" minFractionDigits="0"/>
+                                        </span>
                                     </div>
-                                    <div class="old-price-block">
-                                        <span class="old-price"><fmt:formatNumber value="${giaCu}" type="currency" currencySymbol="" minFractionDigits="0"/>₫</span>
-                                    </div>
+                                    <span class="old-price">
+                                        <fmt:formatNumber value="${sp.giaBan}" type="number" groupingUsed="true" minFractionDigits="0"/>₫
+                                    </span>
                                     <div class="rating-stars mt-2">
                                         <%-- Lấy giá trị trực tiếp từ hàm của SanPham --%>
                                         <c:set var="diemTB" value="${sp.diemTrungBinh}" /> 
@@ -125,7 +128,7 @@
                             <div class="card h-100 product-card-special">
                                 <div class="product-tags">
                                 </div>
-                                <a href="chi-tiet-san-pham?id=${sp.sanPhamId}">
+                                <a href="chi-tiet-san-pham?productId=${sp.sanPhamId}">
                                     <img src="${pageContext.request.contextPath}${sp.hinhAnh}" class="card-img-top" alt="${sp.tenSanPham}">
                                 </a>
                                 <div class="card-body">
@@ -151,13 +154,16 @@
                                         <span class="rating-count">(${tongDG})</span>
                                     </div>
                                     <div class="price-block-special mt-2">
-                                        <span class="sale-price"><fmt:formatNumber value="${giaMoi}" type="currency" currencySymbol="" minFractionDigits="0"/>₫</span>
+                                        <span class="sale-price">
+                                            <fmt:formatNumber value="${sp.giaKhuyenMai}" type="number" groupingUsed="true" minFractionDigits="0"/>₫
+                                        </span>
 
-                                        <c:set var="phanTram" value="${(giaCu - giaMoi) * 100 / giaCu}" />
-                                        <span class="discount-badge">-<fmt:formatNumber value="${phanTram / 100}" type="percent" minIntegerDigits="0"/></span>
+                                        <span class="discount-badge">
+                                            -<fmt:formatNumber value="${sp.phanTramDecimal}" type="percent" minFractionDigits="0"/>
+                                        </span>
                                     </div>
                                     <div class="old-price-block">
-                                        <span class="old-price"><fmt:formatNumber value="${giaCu}" type="currency" currencySymbol="" minFractionDigits="0"/>₫</span>
+                                        <span class="old-price"><fmt:formatNumber value="${sp.giaBan}" type="currency" currencySymbol="" minFractionDigits="0"/>₫</span>
                                     </div>
                                 </div>
                                 <div class="card-footer">

@@ -123,8 +123,7 @@ public class LoaiSanPhamDAO {
                 ));
             }
 
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { }
         return list;
     }
 }

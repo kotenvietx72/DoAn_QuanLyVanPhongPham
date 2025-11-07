@@ -3,16 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Java/monJavaWeb/DoAn_QuanLyVanPhongPham/web/view/index.jsp</file>
-            <file>file:/D:/Java/monJavaWeb/DoAn_QuanLyVanPhongPham/src/java/controller/Home.java</file>
-            <file>file:/D:/Java/monJavaWeb/DoAn_QuanLyVanPhongPham/src/java/dao/NguoiDungDAO.java</file>
-            <file>file:/D:/Java/monJavaWeb/DoAn_QuanLyVanPhongPham/src/java/controller/DanhMucSanPham.java</file>
-            <file>file:/D:/Java/monJavaWeb/DoAn_QuanLyVanPhongPham/src/java/controller/ChiTietSanPham.java</file>
-            <file>file:/D:/Java/monJavaWeb/DoAn_QuanLyVanPhongPham/web/WEB-INF/web.xml</file>
-            <file>file:/D:/Java/monJavaWeb/DoAn_QuanLyVanPhongPham/src/java/dao/DBConnection.java</file>
-            <file>file:/D:/Java/monJavaWeb/DoAn_QuanLyVanPhongPham/web/assets/css/register-login.css</file>
-            <file>file:/D:/Java/monJavaWeb/DoAn_QuanLyVanPhongPham/web/view/dangnhap.jsp</file>
-            <file>file:/D:/Java/monJavaWeb/DoAn_QuanLyVanPhongPham/web/view/dangky.jsp</file>
+            <file>file:/A:/DoAn_QuanLyVanPhongPham/src/java/controller/Home.java</file>
+            <file>file:/A:/DoAn_QuanLyVanPhongPham/src/java/controller/XoaGioHang.java</file>
+            <file>file:/A:/DoAn_QuanLyVanPhongPham/src/java/controller/ThanhToan.java</file>
+            <file>file:/A:/DoAn_QuanLyVanPhongPham/web/view/thanhtoan.jsp</file>
+            <file>file:/A:/DoAn_QuanLyVanPhongPham/web/assets/js/checkout-page.js</file>
         </group>
     </open-files>
 </project-private>

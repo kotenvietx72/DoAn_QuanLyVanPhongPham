@@ -122,10 +122,10 @@ public class ChiTietGioHangDAO {
         List<ChiTietGioHang> list = new ArrayList<>();
 
         String sql = """
-            SELECT ct.*, sp.tenSanPham, sp.giaBan, sp.hinhAnh, sp.tonKho
+            SELECT ct.*, sp.*
             FROM ChiTietGioHang ct
-            JOIN GioHang gh ON ct.gioHangId = gh.gioHangId
-            JOIN SanPham sp ON ct.sanPhamId = sp.sanPhamId
+            INNER JOIN GioHang gh ON ct.gioHangId = gh.gioHangId
+            INNER JOIN SanPham sp ON ct.sanPhamId = sp.sanPhamId
             WHERE gh.khachHangId = ?
         """;
 
@@ -137,10 +137,10 @@ public class ChiTietGioHangDAO {
 
             while (rs.next()) {
                 ChiTietGioHang ct = new ChiTietGioHang(
-                    rs.getInt("id"),
-                    rs.getInt("gioHangId"),
-                    rs.getInt("sanPhamId"),
-                    rs.getInt("soLuong")
+                        rs.getInt("id"),
+                        rs.getInt("gioHangId"),
+                        rs.getInt("sanPhamId"),
+                        rs.getInt("soLuong")
                 );
 
                 // Gắn thêm thông tin sản phẩm để hiển thị
@@ -148,40 +148,27 @@ public class ChiTietGioHangDAO {
                 sp.setSanPhamId(rs.getInt("sanPhamId"));
                 sp.setTenSanPham(rs.getString("tenSanPham"));
                 sp.setGiaBan(rs.getDouble("giaBan"));
+                sp.setGiaNhap(rs.getDouble("giaNhap"));
                 sp.setHinhAnh(rs.getString("hinhAnh"));
                 sp.setTonKho(rs.getInt("tonKho"));
 
-                // Tạm gắn sản phẩm này vào 1 field tạm trong ChiTietGioHang
+                // Gắn vào chi tiết giỏ hàng
                 ct.setSanPham(sp);
 
                 list.add(ct);
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
         return list;
     }
 
     public double tinhTongTienGioHang(int khachHangId) {
-        String sql = """
-            SELECT SUM(sp.giaBan * ct.soLuong) AS tongTien
-            FROM ChiTietGioHang ct
-            JOIN GioHang gh ON ct.gioHangId = gh.gioHangId
-            JOIN SanPham sp ON sp.sanPhamId = ct.sanPhamId
-            WHERE gh.khachHangId = ?
-        """;
+        List<ChiTietGioHang> list = getByNguoiDungId(khachHangId);
+        double total = 0;
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        for (ChiTietGioHang ct : list)
+            total += ct.getSanPham().getGiaKhuyenMai() * ct.getSoLuong();
 
-            ps.setInt(1, khachHangId);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) return rs.getDouble("tongTien");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
+        return total;
     }
 }
