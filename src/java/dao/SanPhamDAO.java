@@ -258,6 +258,19 @@ public class SanPhamDAO {
         return list;
     }
 
+    public boolean updateTonKho(int sanPhamId, int tonKhoMoi) {
+    String sql = "UPDATE SanPham SET TonKho = ? WHERE SanPhamId = ?";
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, tonKhoMoi);
+        ps.setInt(2, sanPhamId);
+        return ps.executeUpdate() > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
+
     // Lấy danh sách sản phẩm thuộc danh mục (loaiId) 
     public ArrayList<SanPham> getSanPhamByLoaiId(int loaiId) {
         ArrayList<model.SanPham> list = new ArrayList<>();
