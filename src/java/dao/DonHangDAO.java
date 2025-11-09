@@ -6,8 +6,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DonHangDAO {
+    public List<DonHang> getDonHangByKhachHangId(int khachHangId) throws Exception {
+        List<DonHang> list = new ArrayList<>();
+        // Khớp với Model của bạn (dùng khachHangId và ngayDat)
+        String sql = "SELECT * FROM DonHang WHERE khachHangId = ? ORDER BY ngayDat DESC";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, khachHangId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(new DonHang(
+                            rs.getInt("donHangId"),
+                            rs.getInt("khachHangId"),
+                            rs.getInt("nhanVienId"),
+                            rs.getString("danhSachSanPham"),
+                            rs.getDouble("tongTien"),
+                            rs.getDate("ngayDat"),
+                            rs.getString("diaChiGiao"),
+                            rs.getDouble("phiVanChuyen"),
+                            rs.getString("trangThai")
+                    ));
+                }
+            }
+        }
+        return list; // Lỗi sẽ tự động ném ra
+    }
+    
     // Lấy toàn bộ đơn hàng
-    public List<DonHang> getAll() {
+    public List<DonHang> getAll() throws Exception{
         List<DonHang> list = new ArrayList<>();
         String sql = "SELECT * FROM DonHang ORDER BY donHangId DESC";
 
@@ -28,14 +57,12 @@ public class DonHangDAO {
                         rs.getString("trangThai")
                 ));
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         return list;
     }
 
     // Lấy đơn hàng theo ID
-    public DonHang getById(int id) {
+    public DonHang getById(int id) throws Exception{
         String sql = "SELECT * FROM DonHang WHERE donHangId=?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -57,14 +84,12 @@ public class DonHangDAO {
                 );
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         return null;
     }
 
     // Tìm kiếm theo tên khách hoặc trạng thái
-    public List<DonHang> search(String keyword) {
+    public List<DonHang> search(String keyword) throws Exception{
         List<DonHang> list = new ArrayList<>();
         String sql = "SELECT * FROM DonHang WHERE trangThai LIKE ? OR donHangId LIKE ?";
 
@@ -90,14 +115,12 @@ public class DonHangDAO {
                 ));
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         return list;
     }
 
     // Cập nhật trạng thái đơn hàng
-    public boolean updateStatus(int donHangId, String trangThai) {
+    public boolean updateStatus(int donHangId, String trangThai) throws Exception{
         String sql = "UPDATE DonHang SET trangThai=? WHERE donHangId=?";
 
         try (Connection conn = DBConnection.getConnection();
@@ -108,14 +131,11 @@ public class DonHangDAO {
 
             return ps.executeUpdate() > 0;
 
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return false;
     }
 
     // Thêm đơn hàng (nếu cần)
-    public boolean insert(DonHang dh) {
+    public boolean insert(DonHang dh) throws Exception{
         String sql = "INSERT INTO DonHang(khachHangId, nhanVienId, danhSachSanPham, tongTien, ngayDat, diaChiGiao, phiVanChuyen, trangThai) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -133,9 +153,6 @@ public class DonHangDAO {
 
             return ps.executeUpdate() > 0;
 
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return false;
     }
 }
