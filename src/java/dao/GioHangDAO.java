@@ -45,4 +45,19 @@ public class GioHangDAO {
         } catch (Exception e) { }
         return -1;
     }
+
+    public boolean clearCartByNguoiDung(int khachHangId) {
+        String sql = "DELETE FROM ChiTietGioHang WHERE GioHangId IN (SELECT GioHangId FROM GioHang WHERE KhachHangId = ?)";
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, khachHangId);
+            int rows = ps.executeUpdate();
+            System.out.println("🗑️ Đã xóa " + rows + " sản phẩm khỏi giỏ hàng của khách #" + khachHangId);
+            return rows > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

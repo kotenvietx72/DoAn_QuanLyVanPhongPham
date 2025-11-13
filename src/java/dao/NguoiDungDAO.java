@@ -261,4 +261,39 @@ public class NguoiDungDAO {
         }
         // Lỗi sẽ tự động được ném ra
     }
+    // Trong tệp NguoiDungDAO.java
+
+    public List<NguoiDung> search(String keyword) {
+        List<NguoiDung> list = new ArrayList<>();
+
+        String sql = "SELECT * FROM NguoiDung WHERE hoTen LIKE ? OR email LIKE ? OR soDienThoai LIKE ?";
+
+        try (Connection conn = new DBConnection().getConnection(); // Giả sử bạn có DBContext
+                 PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            String searchKeyword = "%" + keyword + "%";
+
+            // Không có gì thay đổi ở đây
+            ps.setString(1, searchKeyword); // Cho hoTen
+            ps.setString(2, searchKeyword); // Cho email
+            ps.setString(3, searchKeyword); // Cho soDienThoai
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new NguoiDung(
+                        rs.getInt("nguoiDungId"),
+                        rs.getString("hoTen"),
+                        rs.getString("email"),
+                        rs.getString("matKhau"),
+                        rs.getString("soDienThoai"),
+                        rs.getString("diaChi"),
+                        rs.getDate("ngayDangKy"),
+                        rs.getInt("roleId")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }
