@@ -13,14 +13,9 @@ public class DonHang {
     private double phiVanChuyen;
     private String trangThai;
 
-    // ✅ THÊM DÒNG NÀY - chỉ để hiển thị tên khách
-    private String hoTenKhach;
-
     public DonHang() {}
 
-    public DonHang(int donHangId, int khachHangId, int nhanVienId, String danhSachSanPham,
-                   double tongTien, Date ngayDat, String diaChiGiao,
-                   double phiVanChuyen, String trangThai) {
+    public DonHang(int donHangId, int khachHangId, int nhanVienId, String danhSachSanPham, double tongTien, Date ngayDat, String diaChiGiao, double phiVanChuyen, String trangThai) {
         this.donHangId = donHangId;
         this.khachHangId = khachHangId;
         this.nhanVienId = nhanVienId;
@@ -58,8 +53,4 @@ public class DonHang {
 
     public String getTrangThai() { return trangThai; }
     public void setTrangThai(String trangThai) { this.trangThai = trangThai; }
-
-    // ✅ Thêm getter/setter cho biến tạm này
-    public String getHoTenKhach() { return hoTenKhach; }
-    public void setHoTenKhach(String hoTenKhach) { this.hoTenKhach = hoTenKhach; }
 }
