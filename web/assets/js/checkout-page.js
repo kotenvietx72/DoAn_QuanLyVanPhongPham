@@ -72,6 +72,16 @@ document.addEventListener('DOMContentLoaded', function () {
         
         if (btnPaid) {
             btnPaid.addEventListener('click', function () {
+                // ✅ Lấy giá trị từ JSP để biết đây có phải BUY NOW không
+                const isBuyNow = document.getElementById('isBuyNow')?.value === "true";
+                // ✅ Nếu KHÔNG phải Buy Now → mới xoá giỏ hàng thật
+                if (!isBuyNow) {
+                    fetch('xoa-gio-hang', {method: 'POST', credentials: 'include'})
+                            .then(res => res.text())
+                            .then(text => console.log('Kết quả xóa giỏ hàng:', text))
+                            .catch(err => console.error('Lỗi khi xóa giỏ hàng:', err));
+                }
+
                 const modalBody = qrModalElement.querySelector('.modal-body');
 
                 // Xóa nội dung cũ (ẩn QR)
@@ -89,10 +99,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     const bsModal = bootstrap.Modal.getInstance(qrModalElement);
                     if (bsModal)
                         bsModal.hide();
-                    
-                    checkoutForm.submit();
+
+                    // Quay lại trang giỏ hàng sau khi đóng modal
+                    setTimeout(() => {
+                        window.location.href = 'xem-gio-hang';
+                    }, 500);
                 }, 2000);
             });
+
         }
     }
 });

@@ -33,7 +33,6 @@ public class SanPhamDAO {
             }
 
         } catch (Exception e) {
-            e.printStackTrace(); // Thêm e.printStackTrace() để xem lỗi
         }
         return list;
     }
@@ -58,7 +57,6 @@ public class SanPhamDAO {
             return ps.executeUpdate() > 0;
 
         } catch (Exception e) {
-            e.printStackTrace();
         }
         return false;
     }
@@ -84,7 +82,6 @@ public class SanPhamDAO {
             return ps.executeUpdate() > 0;
 
         } catch (Exception e) {
-            e.printStackTrace();
         }
         return false;
     }
@@ -99,101 +96,37 @@ public class SanPhamDAO {
             return ps.executeUpdate() > 0;
 
         } catch (Exception e) {
-            e.printStackTrace();
         }
         return false;
     }
 
     public SanPham getSanPhamById(int sanPhamId) {
-        String sql = "SELECT * FROM SanPham WHERE sanPhamId = ?";
-        SanPham sp = null;
+    String sql = "SELECT * FROM SanPham WHERE sanPhamId = ?";
+    SanPham sp = null;
 
-        try (Connection conn = DBConnection.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, sanPhamId);
-            ResultSet rs = ps.executeQuery();
+        ps.setInt(1, sanPhamId);
+        ResultSet rs = ps.executeQuery();
 
-            if (rs.next()) {
-                sp = new SanPham(
-                        rs.getInt("sanPhamId"),
-                        rs.getString("tenSanPham"),
-                        rs.getInt("loaiId"),
-                        rs.getInt("nhaCungCapId"),
-                        rs.getString("moTa"),
-                        rs.getDouble("giaNhap"),
-                        rs.getDouble("giaBan"),
-                        rs.getInt("tonKho"),
-                        rs.getString("hinhAnh"),
-                        rs.getString("trangThai")
-                );
-            }
-        } catch (Exception e) {
-            e.printStackTrace(); // Sửa lại: thêm e.printStackTrace()
+        if (rs.next()) {
+            sp = new SanPham(
+                    rs.getInt("sanPhamId"),
+                    rs.getString("tenSanPham"),
+                    rs.getInt("loaiId"),
+                    rs.getInt("nhaCungCapId"),
+                    rs.getString("moTa"),
+                    rs.getDouble("giaNhap"),
+                    rs.getDouble("giaBan"),
+                    rs.getInt("tonKho"),
+                    rs.getString("hinhAnh"),
+                    rs.getString("trangThai")
+            );
         }
-        return sp;
-    }
-    
-    // === ⭐️ HÀM MỚI ĐỂ TÌM KIẾM/LỌC TRONG ADMIN ⭐️ ===
-    public List<SanPham> search(String keyword, int loaiId) {
-        List<SanPham> list = new ArrayList<>();
-        
-        // Dùng "WHERE 1=1" là mẹo để dễ dàng nối các vế AND
-        String sql = "SELECT * FROM SanPham WHERE 1=1";
-        
-        // 1. Thêm điều kiện Tên (LIKE) nếu có
-        if (keyword != null && !keyword.trim().isEmpty()) {
-            sql += " AND tenSanPham LIKE ?";
-        }
-        
-        // 2. Thêm điều kiện Lọc (loaiId) nếu có (loaiId = 0 là "Tất cả")
-        if (loaiId > 0) { 
-            sql += " AND loaiId = ?"; // Tên cột trong DB là loaiId
-        }
-        
-        sql += " ORDER BY sanPhamId ASC"; // Sắp xếp
-
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            // 3. Set tham số theo đúng thứ tự đã thêm vào SQL
-            int paramIndex = 1; // Biến đếm vị trí tham số
-            
-            if (keyword != null && !keyword.trim().isEmpty()) {
-                ps.setString(paramIndex, "%" + keyword + "%");
-                paramIndex++; // Tăng biến đếm
-            }
-            
-            if (loaiId > 0) {
-                ps.setInt(paramIndex, loaiId);
-            }
-
-            // 4. Thực thi và Map kết quả
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                SanPham sp = new SanPham(
-                        rs.getInt("sanPhamId"),
-                        rs.getString("tenSanPham"),
-                        rs.getInt("loaiId"),
-                        rs.getInt("nhaCungCapId"),
-                        rs.getString("moTa"),
-                        rs.getDouble("giaNhap"),
-                        rs.getDouble("giaBan"),
-                        rs.getInt("tonKho"),
-                        rs.getString("hinhAnh"),
-                        rs.getString("trangThai")
-                );
-                list.add(sp);
-            }
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        
-        return list;
-    }
-    // === ⭐️ KẾT THÚC HÀM MỚI ⭐️ ===
-
+    } catch (Exception e) { }
+    return sp;
+}
 
     // Lấy danh sách sản phẩm Flash Sale (ví dụ 5 sản phẩm)
     public ArrayList<SanPham> getSanPhamFlashSale(int soLuong) {
@@ -221,7 +154,6 @@ public class SanPhamDAO {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
         }
         return list;
     }
@@ -252,7 +184,6 @@ public class SanPhamDAO {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
         }
         return list;
     }
@@ -276,7 +207,7 @@ public class SanPhamDAO {
         }
 
         try (Connection conn = DBConnection.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
 
             // 2. Gán các tham số vào câu lệnh an toàn
             for (int i = 0; i < params.size(); i++) {
@@ -300,9 +231,7 @@ public class SanPhamDAO {
                 ));
             }
 
-        } catch (Exception e) {
-            e.printStackTrace(); // Sửa lại: thêm e.printStackTrace()
-        }
+        } catch (Exception e) { }
 
         // 3. Sắp xếp danh sách trong JAVA (dùng sp.getGiaKhuyenMai())
         if (sortMode == null) {
@@ -327,19 +256,6 @@ public class SanPhamDAO {
         }
 
         return list;
-    }
-
-    public boolean updateTonKho(int sanPhamId, int tonKhoMoi) {
-        String sql = "UPDATE SanPham SET TonKho = ? WHERE SanPhamId = ?";
-        try (Connection conn = DBConnection.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, tonKhoMoi);
-            ps.setInt(2, sanPhamId);
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
     }
 
     // Lấy danh sách sản phẩm thuộc danh mục (loaiId) 
@@ -368,7 +284,6 @@ public class SanPhamDAO {
             }
 
         } catch (Exception e) {
-            e.printStackTrace(); // Sửa lại: thêm e.printStackTrace()
         }
         return list;
     }
@@ -424,9 +339,7 @@ public class SanPhamDAO {
                 ));
             }
 
-        } catch (Exception e) {
-            e.printStackTrace(); // Sửa lại: thêm e.printStackTrace()
-        }
+        } catch (Exception e) { }
 
         // 3. (MỚI) Sắp xếp danh sách trong JAVA
         // (Sao chép logic từ DanhMucSanPham.java vào đây)
