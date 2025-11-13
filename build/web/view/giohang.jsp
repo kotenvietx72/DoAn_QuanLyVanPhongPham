@@ -122,9 +122,8 @@
                         </div>
                     </div>
 
-                    <!-- ✅ FORM GỬI ĐẾN THANHTOAN SERVLET (GET - checkout) -->
-                    <form action="${pageContext.request.contextPath}/thanh-toan" method="get">
-                        <input type="hidden" name="action" value="checkout">
+                    <form action="thanh-toan" method="POST">
+                        <input type="hidden" name="tongTien" value="${cartTotal}">
                         <button type="submit" class="btn btn-primary btn-checkout w-100 mt-4">
                             Tiến hành đặt hàng
                         </button>
@@ -138,16 +137,5 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="${pageContext.request.contextPath}/assets/js/cart-page.js"></script>
-
-    <script>
-        // ✅ Hiển thị form VAT khi chọn
-        const vatCheckbox = document.getElementById('vatCheckbox');
-        const vatForm = document.getElementById('vatForm');
-        if (vatCheckbox) {
-            vatCheckbox.addEventListener('change', function() {
-                vatForm.style.display = this.checked ? 'block' : 'none';
-            });
-        }
-    </script>
 </body>
 </html>
